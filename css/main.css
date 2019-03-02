@@ -1,0 +1,63 @@
+body {
+	background: #2c2c2c;
+	color: #CCC;
+}
+
+body, select {
+	font: 12px "Roboto", Georgia, serif;
+}
+
+h1,h2,h3,h4,h5,h6,strong {
+	color: #FFF;
+}
+
+.center {
+    padding: 0;
+    display: block;
+    margin: 20px auto;
+}
+
+.column {
+	float: left;
+	width: 50%;
+}
+
+#entrance-list div, #door-list div {
+	margin-bottom: 5px;
+}
+
+#entrance-list select {
+	width: 250px;
+}
+
+#entrance-list label {
+	display: inline-block;
+	width: 250px;
+	text-align: right;
+	margin-right: 10px;
+}
+
+#door-list label {
+	display: inline-block;
+	width: 25px;
+	text-align: right;
+	margin-right: 10px;
+}
+
+#door-list select {
+	width: 225px;
+	margin-left: 5px;
+}
+
+select option.used {
+	color: #CCCCCC;
+}
+
+li {
+	margin-bottom: 5px;
+}
+
+#unfound-doors-list li.strike {
+	text-decoration: line-through;
+	opacity: 0.15;
+}
