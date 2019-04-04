@@ -1,6 +1,6 @@
 {
 	"name": "lamulana-entrance-tracker",
-	"version": "1.0.0",
+	"version": "2.19.0",
 	"description": "A basic entrance tracker for La-Mulana Randomizer",
 	"main": "main.js",
 	"scripts": {
