@@ -45,9 +45,13 @@ h1,h2,h3,h4,h5,h6,strong {
 
 #door-list label {
 	display: inline-block;
-	width: 25px;
+	width: 50px;
 	text-align: right;
 	margin-right: 10px;
+}
+
+#door-list label img + img {
+	padding-left: 5px;
 }
 
 #door-list select {

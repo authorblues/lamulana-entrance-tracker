@@ -323,21 +323,34 @@ for (let door of DOORS)
 	document.querySelector('ul#unfound-doors-list').appendChild(item);
 }
 
-const DOOR_LABELS = ['1', '2', '3', '4', '5', '6', '7', 'Key', null, null];
-const DOOR_NAMES = ['Amphisbaena', 'Sakit', 'Ellmac', 'Bahamut', 'Viy', 'Palenque', 'Baphomet', 'Key Fairy', '(Open)', '(Open)'];
+const DOOR_IMAGES =
+[
+	['1', 'Amphisbaena'],
+	['2', 'Sakit'],
+	['3', 'Ellmac'],
+	['4', 'Bahamut'],
+	['5', 'Viy'],
+	['6', 'Palenque'],
+	['7', 'Baphomet'],
+	['Key'],
+	null,
+	null,
+];
 
 let dselect;
-for (let i = 0; i < DOOR_LABELS.length; ++i)
+for (let i = 0; i < DOOR_IMAGES.length; ++i)
 {
 	let div = document.createElement('div');
 	let label = document.createElement('label');
 
-	if (DOOR_LABELS[i])
+	if (DOOR_IMAGES[i])
 	{
-		let img = document.createElement('img');
-		img.setAttribute('src', 'images/' + DOOR_LABELS[i] + '.png');
-		img.setAttribute('alt', DOOR_NAMES[i]);
-		label.appendChild(img);
+		for (let imgname of DOOR_IMAGES[i])
+		{
+			let img = document.createElement('img');
+			img.setAttribute('src', 'images/' + imgname + '.png');
+			label.appendChild(img);
+		}
 	}
 	else label.appendChild(document.createTextNode("Open"));
 
@@ -394,7 +407,7 @@ function calculateEscapeRoute()
 		}
 	}
 
-	for (let i = 0; i < DOOR_LABELS.length; ++i)
+	for (let i = 0; i < DOOR_IMAGES.length; ++i)
 	{
 		let select1 = document.querySelector('#door-' + i + '-a');
 		let select2 = document.querySelector('#door-' + i + '-b');
@@ -515,6 +528,8 @@ try
 	const {dialog} = require('electron').remote;
 	const fs = require('fs');
 	const path = require('path');
+
+	const DOOR_NAMES = ['Amphisbaena', 'Sakit', 'Ellmac', 'Bahamut', 'Viy', 'Palenque', 'Baphomet', 'Key Fairy', '(Open)', '(Open)'];
 
 	function importDoors(filename)
 	{
