@@ -60,7 +60,7 @@ app.on('ready', () => {
 	        ]
 	    }
 	]));
-	//main.openDevTools();
+	main.openDevTools();
 });
 
 app.on('window-all-closed', () => {

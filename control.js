@@ -366,16 +366,6 @@ for (let i = 0; i < DOOR_IMAGES.length; ++i)
 	document.querySelector('#door-list').appendChild(div);
 }
 
-/*
-let lastdoor = document.querySelector('#door-' + (DOOR_LABELS.length - 1) + '-a');
-lastdoor.value = 'door-dc';
-lastdoor.setAttribute('disabled', true);
-
-for (let opt of document.querySelectorAll('option[value=door-dc]'))
-	opt.setAttribute('disabled', true);
-updateDoorOptions();
-*/
-
 function __addConnection(map, a1, a2)
 {
 	if (!map.has(a1.field)) map.set(a1.field, []);
@@ -425,41 +415,54 @@ function calculateEscapeRoute()
 	let backtrack = new Map();
 	let work = [];
 
-	let select = document.querySelector('#mother-main-top');
-	if (select && select.value)
+	function tryFrom(x)
 	{
-		let exit = _emap.get(select.value);
-		work.push(exit.field); seen.add(exit.field);
-		backtrack.set(exit.field, {from: 'Mother', to: exit.field, via: exit.display});
-	}
+		let select = document.querySelector('#' + x);
+		let out = '***' + _emap.get(x).display + '***';
 
-	while (work.length && !seen.has('Sun'))
-	{
-		let field = work.shift();
-		for (let exit of edges.get(field) || [])
+		if (select && select.value)
 		{
-			if (seen.has(exit.to)) continue;
-			work.push(exit.to); seen.add(exit.to);
-			backtrack.set(exit.to, Object.assign({from: field}, exit));
+			let exit = _emap.get(select.value);
+			work.push(exit.field); seen.add(exit.field);
+			backtrack.set(exit.field, {from: 'Mother', to: exit.field, via: out});
 		}
+
+		while (work.length && !seen.has('Sun'))
+		{
+			let field = work.shift();
+			for (let exit of edges.get(field) || [])
+			{
+				if (seen.has(exit.to)) continue;
+				work.push(exit.to); seen.add(exit.to);
+				backtrack.set(exit.to, Object.assign({from: field}, exit));
+			}
+		}
+
+		if (!seen.has('Sun')) return [];
+
+		let path = [], field = 'Sun';
+		while (field != 'Mother')
+		{
+			let trans = backtrack.get(field);
+			if (!trans) return [];
+
+			if (trans.via)
+				path.unshift(RENAME_FIELD.get(trans.from) +
+					' to ' + RENAME_FIELD.get(trans.to) +
+					' via ' + trans.via);
+			field = trans.from;
+		}
+
+		return path;
 	}
 
-	if (!seen.has('Sun')) return [];
+	let path = tryFrom('mother-main-top');
+	if (path.length) return path;
 
-	let path = [], field = 'Sun';
-	while (field != 'Mother')
-	{
-		let trans = backtrack.get(field);
-		if (!trans) return [];
+	path = tryFrom('mother-bottom');
+	if (path.length) return path;
 
-		if (trans.via)
-			path.unshift(RENAME_FIELD.get(trans.from) +
-				' to ' + RENAME_FIELD.get(trans.to) +
-				' via ' + trans.via);
-		field = trans.from;
-	}
-
-	return path;
+	return ["Uhhh... You're on your own. Good luck, kiddo! :^)"];
 }
 
 function setState(json)
