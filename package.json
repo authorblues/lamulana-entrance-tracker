@@ -5,7 +5,6 @@
 	"main": "main.js",
 	"scripts": {
 		"start": "electron .",
-		"pack": "electron-builder --dir",
 		"dist": "electron-builder"
 	},
 	"repository": "https://github.com/electron/electron-quick-start",
@@ -19,8 +18,7 @@
 	"author": "GitHub",
 	"license": "CC0-1.0",
 	"devDependencies": {
-		"electron": ">=8.2.5",
-		"electron-packager": ">=14.2.1"
+		"electron": ">=8.2.5"
 	},
 	"dependencies": {},
 	"build": {
