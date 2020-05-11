@@ -28,13 +28,14 @@ h1,h2,h3,h4,h5,h6,strong {
 
 #entrance-list select {
 	width: 250px;
+	margin-left: 10px;
 }
 
 #entrance-list label {
 	display: inline-block;
 	width: 250px;
-	text-align: right;
-	margin-right: 10px;
+	text-align: left;
+	margin-left: 10px;
 }
 
 #door-list div {
@@ -78,6 +79,11 @@ select option.used {
 
 li {
 	margin-bottom: 5px;
+}
+
+.via-path {
+	margin-top: 5px;
+	opacity: 0.45;
 }
 
 #unfound-doors-list li.strike {

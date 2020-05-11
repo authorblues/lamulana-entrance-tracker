@@ -44,7 +44,7 @@ const ENTRANCES =
 	{"name": "inferno-lamia-R", "display": "Inferno Echidna Right (C-1)", "oneway": false, "field": "Inferno-Lamia", "type": Direction.UP, "logname": "Inferno Cavern (Echidna's Chamber)"},
 
 	{"name": "extinction-main-1", "display": "Extinction Main Entrance Top (A-2)", "oneway": false, "field": "Extinction", "type": Direction.LEFT, "logname": "Chamber of Extinction (Mural of Invocation) (Upper)"},
-	{"name": "extinction-main-2", "display": "Extinction Main Entrance Bottom (A-2)", "oneway": false, "field": "Extinction", "type": Direction.LEFT, "logname": "Chamber of Extinction (Mural of Invocation) (Lower)"},
+	{"name": "extinction-main-2", "display": "Extinction Main Entrance Bottom (A-2)", "oneway": false, "field": "Extinction-Bottom-Main", "type": Direction.LEFT, "logname": "Chamber of Extinction (Mural of Invocation) (Lower)"},
 	{"name": "extinction-mother", "display": "Extinction Mother Ladder (H-5)", "oneway": false, "field": "Extinction", "type": Direction.UP, "logname": "Chamber of Extinction (Lake of Life)"},
 	{"name": "extinction-magatama-R", "display": "Extinction Magatama Right (F-1)", "oneway": false, "field": "Extinction-Magatama", "type": Direction.UP, "logname": "Chamber of Extinction (Gate of Ox-Head and Horse-Face)"},
 	{"name": "extinction-palenque", "display": "Extinction Viy Ladder to Palenque", "oneway": false, "field": "Extinction-Palenque", "type": Direction.UP, "logname": "Chamber of Extinction (Shiva's Crucifix)"},
@@ -61,8 +61,8 @@ const ENTRANCES =
 
 	{"name": "mother-side-crush", "display": "Mother Side Room Skull Walls (A-3)", "oneway": false, "field": "Mother-Side-A", "type": Direction.DOWN, "logname": "Shrine of the Mother (Treasury) (Death Seal)"},
 	{"name": "mother-side-smash", "display": "Mother Side Room Smash (F-3)", "oneway": false, "field": "Mother-Side-F", "type": Direction.DOWN, "logname": "Shrine of the Mother (Treasury) (Map)"},
-	{"name": "mother-main-top", "display": "Mother Top Ladder (C-1)", "oneway": false, "field": "Mother", "type": Direction.UP, "logname": "Shrine of the Mother (Amphisbaena's Room)"},
-	{"name": "mother-bottom", "display": "Mother Bottom Ladder (E-6)", "oneway": false, "field": "Mother", "type": Direction.DOWN, "logname": "Shrine of the Mother (Bahamut's Room)"},
+	{"name": "mother-main-top", "display": "Mother Top Ladder (C-1)", "oneway": false, "field": "Mother-Top", "type": Direction.UP, "logname": "Shrine of the Mother (Amphisbaena's Room)"},
+	{"name": "mother-bottom", "display": "Mother Bottom Ladder (E-6)", "oneway": false, "field": "Mother-Bottom", "type": Direction.DOWN, "logname": "Shrine of the Mother (Bahamut's Room)"},
 
 	{"name": "illusion-eden", "display": "Illusion Eden Bottom Right (G-6)", "oneway": false, "field": "Illusion", "type": Direction.DOWN, "logname": "Gate of Illusion (Entrance of Illusion)"},
 	{"name": "illusion-bottom-L", "display": "Illusion Bottom Left (C-5)", "oneway": false, "field": "Illusion", "type": Direction.DOWN, "logname": "Gate of Illusion (Fool's Confusion Corridor)"},
@@ -117,7 +117,7 @@ const DOORS =
 	{"name": "door-inferno", "display": "Inferno Door above Viy (D-5)", "field": "Inferno", "logname": "Inferno Cavern (Darkness Sanctuary)"},
 	{"name": "door-extinction-key", "display": "Extinction Key Fairy Door (G-5)", "field": "Extinction", "logname": "Chamber of Extinction (Path of Life)"},
 	{"name": "door-extinction", "display": "Extinction Magatama Chamber Left Door (C-1)", "field": "Extinction-Magatama", "logname": "Chamber of Extinction (Approach to the Sanctuary)"},
-	{"name": "door-endless", "display": "Endless Corridor One-Way (D-1)", "field": "Dimensional", "logname": "Endless Corridor (First Endless Corridor)"},
+	{"name": "door-endless", "display": "Endless Corridor One-Way Entrance (D-1)", "field": "Dimensional", "logname": "Endless Corridor (First Endless Corridor)"},
 	{"name": "door-illusion", "display": "Illusion Door above Grail (C-2)", "field": "Illusion", "logname": "Gate of Illusion"},
 	{"name": "door-graveyard", "display": "Graveyard of the Giants Door (C-3)", "field": "Graveyard", "logname": "Graveyard of the Giants"},
 	{"name": "door-moonlight", "display": "Temple of Moonlight Door (C-5)", "field": "Moonlight", "logname": "Temple of Moonlight"},
@@ -125,7 +125,7 @@ const DOORS =
 	{"name": "door-ruin-top", "display": "Ruin Nuwa's Pyramid Door (F-1)", "field": "Ruin-Top", "logname": "Tower of Ruin (N�wa's Pyramid)"},
 	{"name": "door-ruin-bottom", "display": "Ruin Door Under Earth Spear (D-6)", "field": "Ruin", "logname": "Tower of Ruin (Tower of Babel)"},
 	{"name": "door-birth", "display": "Birth* Wedge Door (D-2)", "field": "Birth-Side", "logname": "Chamber of Birth"},
-	{"name": "door-dc", "display": "Dimensional Corridor Exit (B-6)", "field": "Dimensional", "logname": "Dimensional Corridor"},
+	{"name": "door-dc", "display": "Dimensional Corridor Exit Door (B-6)", "field": "Dimensional", "logname": "Dimensional Corridor"},
 	{"name": "door-8bit-maus", "display": "8-Bit Mausoleum Gate of Time Door (D-11)", "field": "8-Bit Mausoleum", "logname": "Gate of Time (Mausoleum)"},
 ];
 
@@ -150,7 +150,8 @@ const RENAME_FIELD = new Map(
 	["Endless", "Endless Corridor"],
 	["Mother-Side-A", "Shrine of the Mother (Left Side Room)"],
 	["Mother-Side-F", "Shrine of the Mother (Right Side Room)"],
-	["Mother", "Shrine of the Mother"],
+	["Mother-Top", "Shrine of the Mother"],
+	["Mother-Bottom", "Shrine of the Mother"],
 	["Illusion", "Gate of Illusion"],
 	["Graveyard", "Graveyard of the Giants"],
 	["Moonlight", "Temple of Moonlight"],
@@ -158,13 +159,15 @@ const RENAME_FIELD = new Map(
 	["Ruin", "Tower of Ruin"],
 	["Ruin-Middle", "Tower of Ruin"],
 	["Ruin-Top", "Tower of Ruin"],
-	["Birth", "Chamber of Birth (Skanda's Field)"],
+	["Birth", "Chamber of Birth (Grail Side)"],
 	["Birth-Side", "Chamber of Birth (Wedge Side)"],
 	["Dimensional", "Dimensional Corridor"],
 	["8-Bit Surface", "8-Bit Surface"],
 	["8-Bit Guidance", "8-Bit Guidance"],
 	["8-Bit Mausoleum", "8-Bit Mausoleum"],
 ]);
+
+const ESCAPE_FROM = ['Mother-Top', 'Surface', 'Guidance', 'Mausoleum', 'Sun', 'Spring', 'Inferno', 'Extinction', 'Twin', 'Endless', 'Illusion', 'Graveyard', 'Moonlight', 'Goddess', 'Ruin', 'Birth', 'Dimensional', '8-Bit Surface'];
 
 let door_selects = [];
 
@@ -253,12 +256,21 @@ function updateEscapeRoute()
 	for (let item of document.querySelectorAll('#escape-route-list li'))
 		item.parentNode.removeChild(item);
 
-	let escape = calculateEscapeRoute();
+	let escape = calculateEscapeRoute(document.querySelector('#starting-screen').value);
 	let list = document.querySelector('#escape-route-list');
 	for (let path of escape)
 	{
 		let item = document.createElement('li');
-		item.appendChild(document.createTextNode(path));
+		item.appendChild(document.createTextNode(path[0]));
+		if (path.length > 1)
+		{
+			let via1 = document.createElement('ul');
+			let via2 = document.createElement('li');
+			via2.appendChild(document.createTextNode(path[1]));
+			via2.classList.add('via-path');
+			via1.appendChild(via2);
+			item.appendChild(via1);
+		}
 		list.appendChild(item);
 	}
 }
@@ -273,7 +285,7 @@ function update()
 for (let entrance of ENTRANCES)
 {
 	let div = document.createElement('div');
-	if (entrance.oneway) div.classList.add('oneway');
+	//if (entrance.oneway) div.classList.add('oneway');
 	let label = document.createElement('label');
 	label.appendChild(document.createTextNode(entrance.display));
 
@@ -281,7 +293,7 @@ for (let entrance of ENTRANCES)
 	let option = document.createElement('option');
 	option.setAttribute('value', '');
 	option.appendChild(document.createTextNode(''));
-	if (entrance.oneway) select.setAttribute('disabled', true);
+	//if (entrance.oneway) select.setAttribute('disabled', true);
 	select.appendChild(option);
 
 	let match = DIRECTION_MATCH.get(entrance.type);
@@ -299,8 +311,8 @@ for (let entrance of ENTRANCES)
 	select.oldvalue = '';
 	select.onchange = changeEntranceEvent;
 
-	div.appendChild(label);
 	div.appendChild(select);
+	div.appendChild(label);
 	document.querySelector('#entrance-list').appendChild(div);
 }
 
@@ -321,6 +333,16 @@ for (let door of DOORS)
 	item.setAttribute('id', 'unfound-' + door.name);
 	item.appendChild(document.createTextNode(door.display));
 	document.querySelector('ul#unfound-doors-list').appendChild(item);
+}
+
+let escape_from_select = document.querySelector('#starting-screen');
+escape_from_select.onchange = updateEscapeRoute;
+for (let start of ESCAPE_FROM)
+{
+	option = document.createElement('option');
+	option.setAttribute('value', start);
+	option.appendChild(document.createTextNode(RENAME_FIELD.get(start)));
+	escape_from_select.appendChild(option);
 }
 
 const DOOR_IMAGES =
@@ -372,17 +394,19 @@ function __addConnection(map, a1, a2)
 	map.get(a1.field).push({to: a2.field, via: a1.display});
 }
 
-function calculateEscapeRoute()
+function calculateEscapeRoute(startfield)
 {
 	let edges = new Map(
 	[
 		['Guidance-Top', [{to: 'Guidance', via: null}]],
 		['Spring', [{to: 'Sun', via: 'Flooded Reservoir (B-10)'}, {to: 'Surface', via: "Bahamut's Room (C-2)"}]],
 		['Sun', [{to: 'Twin', via: "Ellmac's Chamber (D-6)"}, {to: 'Moonlight', via: "Pyramid Warp (E-3)"}]],
+		['Extinction-Bottom-Main', [{to: 'Extinction', via: null}]],
 		['Mausoleum', [{to: 'Spring', via: "Ribu's Pipe (D-5)"}]],
 		['Ruin-Top', [{to: 'Ruin-Middle', via: null}]],
 		['Ruin-Middle', [{to: 'Ruin', via: null}]],
 		['Inferno', [{to: 'Extinction-Palenque', via: "Viy's Chamber (D-6)"}]],
+		['Mother-Top', [{to: 'Mother-Bottom', via: "Original Shrine of the Mother (Unmarked Door)"}]],
 	]);
 
 	for (let entr of ENTRANCES)
@@ -411,58 +435,51 @@ function calculateEscapeRoute()
 		}
 	}
 
-	let seen = new Set(['Mother']);
-	let backtrack = new Map();
-	let work = [];
-
-	function tryFrom(x)
+	function tryFrom(ff)
 	{
-		let select = document.querySelector('#' + x);
-		let out = '***' + _emap.get(x).display + '***';
+		if (ff == 'Sun') return [["You're already there!"]];
 
-		if (select && select.value)
+		let seen = new Set([ff]);
+		let backtrack = new Map();
+		let work = edges.get(ff) || [];
+
+		for (let edge of work)
 		{
-			let exit = _emap.get(select.value);
-			work.push(exit.field); seen.add(exit.field);
-			backtrack.set(exit.field, {from: 'Mother', to: exit.field, via: out});
+			seen.add(edge.to);
+			backtrack.set(edge.to, Object.assign({from: ff}, edge));
 		}
 
 		while (work.length && !seen.has('Sun'))
 		{
-			let field = work.shift();
+			let field = work.shift().to;
 			for (let exit of edges.get(field) || [])
 			{
 				if (seen.has(exit.to)) continue;
-				work.push(exit.to); seen.add(exit.to);
+				work.push(exit); seen.add(exit.to);
 				backtrack.set(exit.to, Object.assign({from: field}, exit));
 			}
 		}
 
 		if (!seen.has('Sun')) return [];
 
-		let path = [], field = 'Sun';
-		while (field != 'Mother')
+		let path = [[RENAME_FIELD.get('Sun')]], field = 'Sun';
+		while (field != ff)
 		{
 			let trans = backtrack.get(field);
 			if (!trans) return [];
 
 			if (trans.via)
-				path.unshift(RENAME_FIELD.get(trans.from) +
-					' to ' + RENAME_FIELD.get(trans.to) +
-					' via ' + trans.via);
+				path.unshift([RENAME_FIELD.get(trans.from), 'take ' + trans.via]);
 			field = trans.from;
 		}
 
 		return path;
 	}
 
-	let path = tryFrom('mother-main-top');
+	let path = tryFrom(startfield);
 	if (path.length) return path;
 
-	path = tryFrom('mother-bottom');
-	if (path.length) return path;
-
-	return ["Uhhh... You're on your own. Good luck, kiddo! :^)"];
+	return [["Uhhh... You're on your own. Good luck, kiddo! :^)"]];
 }
 
 function setState(json)
@@ -525,6 +542,8 @@ function getByLogname(list, logname)
 	return null;
 }
 
+update();
+
 try
 {
 	const ipc = require('electron').ipcRenderer;
@@ -540,14 +559,19 @@ try
 		let rows = new Array(DOOR_NAMES.length);
 
 		let names = DOOR_NAMES.slice(0);
+		let seen = new Set();
 		for (let line of data.split(/[\r\n]+/)) if (line)
 		{
 			let [a, type, b] = line.split(' => ');
+			if (a == 'Dimensional Corridor') continue;
+			if (seen.has(a) || seen.has(b)) continue;
 
 			// which row should this go in?
 			let ndx = names.indexOf(type);
 			if (ndx < 0) continue;
 
+			seen.add(a);
+			seen.add(b);
 			rows[ndx] = [a, b];
 			names[ndx] = null;
 		}
