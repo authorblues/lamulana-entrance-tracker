@@ -167,7 +167,7 @@ const RENAME_FIELD = new Map(
 	["8-Bit Mausoleum", "8-Bit Mausoleum"],
 ]);
 
-const ESCAPE_FROM = ['Mother-Top', 'Surface', 'Guidance', 'Mausoleum', 'Sun', 'Spring', 'Inferno', 'Extinction', 'Twin', 'Endless', 'Illusion', 'Graveyard', 'Moonlight', 'Goddess', 'Ruin', 'Birth', 'Dimensional', '8-Bit Surface'];
+const STARTING_SCREENS = ['Mother-Top', 'Surface', 'Guidance', 'Mausoleum', 'Sun', 'Spring', 'Inferno', 'Extinction', 'Twin', 'Endless', 'Illusion', 'Graveyard', 'Moonlight', 'Goddess', 'Ruin', 'Birth', 'Dimensional', '8-Bit Surface'];
 
 let door_selects = [];
 
@@ -197,6 +197,7 @@ function changeEntrance(target)
 	}
 
 	updateEntranceOptions();
+	updateAccessibleExits();
 	updateEscapeRoute();
 }
 
@@ -228,6 +229,7 @@ function changeDoorEvent(e)
 	}
 
 	updateDoorOptions();
+	updateAccessibleExits();
 	updateEscapeRoute();
 	recordHistory();
 }
@@ -251,12 +253,78 @@ function updateDoorOptions()
 	}
 }
 
+function updateAccessibleExits()
+{
+	// remove accessible tag from all elements
+	for (let option of document.querySelectorAll('.accessible'))
+		option.classList.remove('accessible');
+
+	let edges = new Map(
+	[
+		['Guidance-Top', [{to: 'Guidance', via: null}]],
+		['Spring', [{to: 'Sun', via: 'Flooded Reservoir (B-10)'}, {to: 'Surface', via: "Bahamut's Room (C-2)"}]],
+		['Sun', [{to: 'Twin', via: "Ellmac's Chamber (D-6)"}, {to: 'Moonlight', via: "Pyramid Warp (E-3)"}]],
+		['Extinction-Bottom-Main', [{to: 'Extinction', via: null}]],
+		['Mausoleum', [{to: 'Spring', via: "Ribu's Pipe (D-5)"}]],
+		['Ruin-Top', [{to: 'Ruin-Middle', via: null}]],
+		['Ruin-Middle', [{to: 'Ruin', via: null}]],
+		['Inferno', [{to: 'Extinction-Palenque', via: "Viy's Chamber (D-6)"}]],
+		['Mother-Top', [{to: 'Mother-Bottom', via: "Original Shrine of the Mother (Unmarked Door)"}]],
+	]);
+
+	let checkeddoors = new Set();
+	for (let select of document.querySelectorAll('#door-list select'))
+		if (select.value) checkeddoors.add(select.value);
+
+	let seen = new Set();
+	let canreach = new Set();
+
+	function _processField(f)
+	{
+		let work = [f];
+		while (work.length)
+		{
+			let field = work.shift();
+			if (canreach.has(field)) continue;
+			canreach.add(field);
+
+			let connect = edges.get(field) || [];
+			for (let c of connect) work.push(c.to);
+		}
+	}
+
+	// building list of accessible fields
+	for (let entr of ENTRANCES)
+	{
+		let select = document.querySelector('#' + entr.name);
+		if (select && select.value) _processField(_emap.get(entr.name).field);
+	}
+
+	for (let select of document.querySelectorAll('#door-list select'))
+		if (select.value) _processField(_dmap.get(select.value).field);
+
+	// marking all accessible and unchecked entrances and doors
+	for (let other of ENTRANCES)
+	{
+		let info = _emap.get(other.name);
+		let otherselect = document.querySelector('#' + other.name);
+		if (otherselect && !otherselect.value && canreach.has(info.field))
+			otherselect.parentNode.classList.add('accessible');
+	}
+
+	for (let other of DOORS)
+	{
+		if (!checkeddoors.has(other.name) && canreach.has(other.field))
+			document.querySelector('#unfound-' + other.name).classList.add('accessible');
+	}
+}
+
 function updateEscapeRoute()
 {
 	for (let item of document.querySelectorAll('#escape-route-list li'))
 		item.parentNode.removeChild(item);
 
-	let escape = calculateEscapeRoute(document.querySelector('#starting-screen').value);
+	let escape = calculateEscapeRoute(document.querySelector('#escape-from').value);
 	let list = document.querySelector('#escape-route-list');
 	for (let path of escape)
 	{
@@ -279,8 +347,13 @@ function update()
 {
 	updateEntranceOptions();
 	updateDoorOptions();
+	updateAccessibleExits();
 	updateEscapeRoute();
 }
+
+let icon = document.createElement('span');
+icon.classList.add('icon');
+icon.appendChild(document.createTextNode("(?)"));
 
 for (let entrance of ENTRANCES)
 {
@@ -288,6 +361,7 @@ for (let entrance of ENTRANCES)
 	//if (entrance.oneway) div.classList.add('oneway');
 	let label = document.createElement('label');
 	label.appendChild(document.createTextNode(entrance.display));
+	label.appendChild(icon.cloneNode(true));
 
 	let select = document.createElement('select');
 	let option = document.createElement('option');
@@ -332,12 +406,13 @@ for (let door of DOORS)
 	let item = document.createElement('li');
 	item.setAttribute('id', 'unfound-' + door.name);
 	item.appendChild(document.createTextNode(door.display));
+	item.appendChild(icon.cloneNode(true));
 	document.querySelector('ul#unfound-doors-list').appendChild(item);
 }
 
-let escape_from_select = document.querySelector('#starting-screen');
+let escape_from_select = document.querySelector('#escape-from');
 escape_from_select.onchange = updateEscapeRoute;
-for (let start of ESCAPE_FROM)
+for (let start of STARTING_SCREENS)
 {
 	option = document.createElement('option');
 	option.setAttribute('value', start);

@@ -3,7 +3,7 @@ let windows = new Map();
 
 function createWindow(name, page, options)
 {
-	let _options = options || {width: 600, height: 600};
+	let _options = options || {width: 600, height: 800};
 	_options.show = false;
 
 	let window = new BrowserWindow(_options);
@@ -39,7 +39,7 @@ app.on('ready', () => {
 		        },
 				{ type: 'separator' },
 				{
-		            label: 'Import Spoiler Log Folder',
+		            label: 'Import Spoiler Log Folder (LM1 Only)',
                     accelerator: 'CmdOrCtrl+P',
 		            click: function(){ main.webContents.send('import-spoiler'); },
 		        },
@@ -60,7 +60,7 @@ app.on('ready', () => {
 	        ]
 	    }
 	]));
-	//main.openDevTools();
+	main.openDevTools();
 });
 
 app.on('window-all-closed', () => {

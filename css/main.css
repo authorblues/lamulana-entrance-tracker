@@ -11,6 +11,11 @@ h1,h2,h3,h4,h5,h6,strong {
 	color: #FFF;
 }
 
+.logo-link {
+	text-align: center;
+	margin-top: 30px;
+}
+
 .center {
     padding: 0;
     display: block;
@@ -20,6 +25,11 @@ h1,h2,h3,h4,h5,h6,strong {
 .column {
 	float: left;
 	width: 50%;
+}
+
+.important {
+	background-color: #444;
+	padding: 10px;
 }
 
 #entrance-list div, #door-list div {
@@ -73,6 +83,16 @@ select option.used {
 	color: #CC3333;
 }
 
+.icon {
+	display: none;
+	padding-left: 3px;
+	color: red;
+}
+
+.accessible .icon {
+	display: inline-block;
+}
+
 .note {
 	color: #999999;
 }
@@ -86,7 +106,16 @@ li {
 	opacity: 0.45;
 }
 
+#unfound-doors-list li {
+	max-height: 17px;
+	vertical-align: middle;
+}
+
 #unfound-doors-list li.strike {
 	text-decoration: line-through;
 	opacity: 0.15;
+}
+
+#notes {
+	width: 500px;
 }

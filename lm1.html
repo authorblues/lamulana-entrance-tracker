@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>La-Mulana 1 Ruins Mapper</title>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+	<h1>Entrances</h1>
+	<div id="entrance-list"></div>
+
+	<h1>Doors</h1>
+	<div id="door-list"></div>
+	<h3>Not yet found</h3>
+	<div id="unfound-doors">
+		<ul id="unfound-doors-list"></ul>
+	</div>
+
+	<h1>Escape Route</h1>
+	<div>
+		<label>Escape from</label>
+		<select id="escape-from"></select>
+	</div>
+	<div id="escape-route">
+		<p><em class="note">Not guaranteed to be the fastest route, but attempts to minimize area transitions!</em></p>
+		<ul id="escape-route-list"></ul>
+	</div>
+
+	<h1>Notes</h1>
+	<div>
+		<textarea rows="5" id="notes"></textarea>
+	</div>
+
+	<script src="./lm1.js">
+		//require('./control.js');
+	</script>
+</body>
+</html>
