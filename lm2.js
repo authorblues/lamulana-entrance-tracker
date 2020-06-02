@@ -95,8 +95,8 @@ const DOORS =
 	{"name": "soul-frost-balor", "display": "Frost Giants Balor Soul Gate (E-1)", "field": "Frost-Giants", "logname": "Shrine of the Frost Giants Five Soul Gate (E-1)"},
 	{"name": "soul-frost-main", "display": "Frost Giants Main Soul Gate (E-4)", "field": "Frost-Giants", "logname": "Shrine of the Frost Giants Two Soul Gate (E-4)"},
 	{"name": "soul-gotd-main", "display": "Gate of the Dead Main Soul Gate (C-4)", "field": "GOTD", "logname": "Gate of the Dead Soul Gate (C-4)"},
-	{"name": "soul-taka-top", "display": "Takamagahara Shrine Top Main Soul Gate (D-1)", "field": "Takamagahara", "logname": "Takamagahara Shrine Three Soul Gate (D-1)"},
-	{"name": "soul-taka-main", "display": "Takamagahara Shrine Belial Soul Gate (B-1)", "field": "Takamagahara-Belial", "logname": "Takamagahara Shrine Five Soul Gate (B-1)"},
+	{"name": "soul-taka-top", "display": "Takamagahara Top Main Soul Gate (D-1)", "field": "Takamagahara", "logname": "Takamagahara Shrine Three Soul Gate (D-1)"},
+	{"name": "soul-taka-main", "display": "Takamagahara Belial Soul Gate (B-1)", "field": "Takamagahara-Belial", "logname": "Takamagahara Shrine Five Soul Gate (B-1)"},
 	{"name": "soul-hlab-main", "display": "Heaven's Labyrinth Main Soul Gate (E-5)", "field": "Heaven", "logname": "Heavens Labyrinth Soul Gate (E-5)"},
 	{"name": "soul-valhalla-tr", "display": "Valhalla Top Right Soul Gate (E-2)", "field": "Valhalla", "logname": "Valhalla Soul Gate (E-2)"},
 	{"name": "soul-chaos-abzu", "display": "Ancient Chaos Abzu/Corridor Soul Gate (C-1)", "field": "Chaos-Abzu", "logname": "Ancient Chaos Soul Gate (C-1)"},
@@ -169,6 +169,7 @@ function changeEntrance(target)
 	}
 
 	updateEntranceOptions();
+	updateDoorOptions();
 	updateAccessibleExits();
 	updateEscapeRoute();
 }
@@ -192,36 +193,17 @@ function updateEntranceOptions()
 	}
 }
 
-function changeDoorEvent(e)
-{
-	for (let select of door_selects)
-	{
-		if (select != e.target && select.value == e.target.value)
-			select.value = '';
-	}
-
-	updateDoorOptions();
-	updateAccessibleExits();
-	updateEscapeRoute();
-	recordHistory();
-}
-
 function updateDoorOptions()
 {
-	for (let door of DOORS)
-		document.querySelector('#unfound-' + door.name).classList.remove('strike');
-
-	for (let option of document.querySelectorAll('#door-list select option'))
+	for (let option of document.querySelectorAll('#soul-list select option'))
 		option.classList.remove('used');
 
-	for (let select of document.querySelectorAll('#door-list select.door'))
+	for (let select of document.querySelectorAll('#soul-list select.doormatch'))
 	{
+		console.log(select.value);
 		if (select.value)
-		{
-			for (let option of document.querySelectorAll('#door-list select.door option[value=' + select.value + ']'))
+			for (let option of document.querySelectorAll('#soul-list select.doormatch option[value=' + select.value + ']'))
 				option.classList.add('used');
-			document.querySelector('#unfound-' + select.value).classList.add('strike');
-		}
 	}
 }
 
@@ -285,7 +267,7 @@ function updateAccessibleExits()
 	]);
 
 	let checkeddoors = new Set();
-	for (let select of document.querySelectorAll('#door-list select'))
+	for (let select of document.querySelectorAll('#soul-list select'))
 		if (select.value) checkeddoors.add(select.value);
 
 	let seen = new Set();
@@ -312,22 +294,22 @@ function updateAccessibleExits()
 		if (select && select.value) _processField(_emap.get(entr.name).field);
 	}
 
-	for (let select of document.querySelectorAll('#door-list select'))
+	for (let select of document.querySelectorAll('#soul-list select'))
 		if (select.value) _processField(_dmap.get(select.value).field);
 
 	// marking all accessible and unchecked entrances and doors
 	for (let other of ENTRANCES)
 	{
-		let info = _emap.get(other.name);
 		let otherselect = document.querySelector('#' + other.name);
-		if (otherselect && !otherselect.value && canreach.has(info.field))
+		if (otherselect && !otherselect.value && canreach.has(other.field))
 			otherselect.parentNode.classList.add('accessible');
 	}
 
 	for (let other of DOORS)
 	{
-		if (!checkeddoors.has(other.name) && canreach.has(other.field))
-			document.querySelector('#unfound-' + other.name).classList.add('accessible');
+		let otherselect = document.querySelector('#' + other.name);
+		if (otherselect && !otherselect.value && canreach.has(other.field))
+			otherselect.parentNode.classList.add('accessible');
 	}
 }
 
@@ -363,86 +345,123 @@ function update()
 	updateEscapeRoute();
 }
 
-let icon = document.createElement('span');
-icon.classList.add('icon');
-icon.appendChild(document.createTextNode("(?)"));
-
-for (let entrance of ENTRANCES)
+function entrancesMatch(a, b, override)
 {
-	let div = document.createElement('div');
-	//if (entrance.oneway) div.classList.add('oneway');
-	let label = document.createElement('label');
-	label.appendChild(document.createTextNode(entrance.display));
-	label.appendChild(icon.cloneNode(true));
+	if (override) return true;
+	return DIRECTION_MATCH.get(a.type) == b.type;
+}
 
-	let select = document.createElement('select');
-	let option = document.createElement('option');
-	option.setAttribute('value', '');
-	option.appendChild(document.createTextNode(''));
-	//if (entrance.oneway) select.setAttribute('disabled', true);
-	select.appendChild(option);
+function deleteChildren(node)
+{
+	while (node.firstChild)
+		node.firstChild.remove();
+}
 
-	let match = DIRECTION_MATCH.get(entrance.type);
-	for (let exit of ENTRANCES)
+const SOULDOORS = [1, 2, 3, 5, 9];
+function buildTracker()
+{
+	deleteChildren(document.querySelector('#entrance-list'));
+	deleteChildren(document.querySelector('#soul-list'));
+	deleteChildren(document.querySelector('#escape-route-list'));
+
+	let allowAny = !!document.querySelector('#full-rando').checked;
+
+	let icon = document.createElement('span');
+	icon.classList.add('icon');
+	icon.appendChild(document.createTextNode("(?)"));
+
+	for (let entrance of ENTRANCES)
 	{
-		if (entrance != exit && exit.type == match)
+		let div = document.createElement('div');
+		//if (entrance.oneway) div.classList.add('oneway');
+		let label = document.createElement('label');
+		label.appendChild(document.createTextNode(entrance.display));
+		label.appendChild(icon.cloneNode(true));
+
+		let select = document.createElement('select');
+		let option = document.createElement('option');
+		option.setAttribute('value', '');
+		option.appendChild(document.createTextNode(''));
+		//if (entrance.oneway) select.setAttribute('disabled', true);
+		select.appendChild(option);
+
+		for (let exit of ENTRANCES)
 		{
-			option = document.createElement('option');
-			option.setAttribute('value', exit.name);
-			option.appendChild(document.createTextNode(exit.display));
-			select.appendChild(option);
+			if (entrancesMatch(entrance, exit, allowAny) && entrance != exit)
+			{
+				option = document.createElement('option');
+				option.setAttribute('value', exit.name);
+				option.appendChild(document.createTextNode(exit.display));
+				select.appendChild(option);
+			}
 		}
+		select.setAttribute('id', entrance.name);
+		select.oldvalue = '';
+		select.onchange = changeEntranceEvent;
+
+		div.appendChild(select);
+		div.appendChild(label);
+		document.querySelector('#entrance-list').appendChild(div);
 	}
-	select.setAttribute('id', entrance.name);
-	select.oldvalue = '';
-	select.onchange = changeEntranceEvent;
 
-	div.appendChild(select);
-	div.appendChild(label);
-	document.querySelector('#entrance-list').appendChild(div);
-}
+	let soulselect = document.createElement('select');
+	soulselect.classList.add('soulcount');
+	let souloption = document.createElement('option');
+	souloption.appendChild(document.createTextNode(''));
+	souloption.setAttribute('value', '');
+	soulselect.appendChild(souloption);
 
-let door_select_base = document.createElement('select');
-door_select_base.classList.add('door');
-let option = document.createElement('option');
-option.setAttribute('value', '');
-option.appendChild(document.createTextNode(''));
-door_select_base.appendChild(option);
-
-for (let door of DOORS)
-{
-	option = document.createElement('option');
-	option.setAttribute('value', door.name);
-	option.appendChild(document.createTextNode(door.display));
-	door_select_base.appendChild(option);
-
-	let item = document.createElement('li');
-	item.setAttribute('id', 'unfound-' + door.name);
-	item.appendChild(document.createTextNode(door.display));
-	item.appendChild(icon.cloneNode(true));
-	document.querySelector('ul#unfound-doors-list').appendChild(item);
-}
-
-let dselect;
-
-const SOULDOORS = [1, 2, 2, 3, 3, 5, 5, 5, 9];
-for (let i = 0; i < SOULDOORS.length; ++i)
-{
-	let div = document.createElement('div');
-	let label = document.createElement('label');
-	label.appendChild(document.createTextNode(SOULDOORS[i]));
-
-	div.appendChild(label);
-	for (let which of ['a', 'b'])
+	for (let value of SOULDOORS)
 	{
-		dselect = door_select_base.cloneNode(true);
-		dselect.setAttribute('id', 'door-' + i + '-' + which);
-		dselect.onchange = changeDoorEvent;
-		door_selects.push(dselect);
-		div.appendChild(dselect);
+		souloption = document.createElement('option');
+		souloption.appendChild(document.createTextNode(value));
+		souloption.setAttribute('value', value);
+		soulselect.appendChild(souloption);
 	}
-	document.querySelector('#door-list').appendChild(div);
+
+	for (let entrance of DOORS)
+	{
+		let div = document.createElement('div');
+		//if (entrance.oneway) div.classList.add('oneway');
+		let label = document.createElement('label');
+		label.appendChild(document.createTextNode(entrance.display));
+		label.appendChild(icon.cloneNode(true));
+
+		let select = document.createElement('select');
+		select.classList.add('doormatch');
+
+		let option = document.createElement('option');
+		option.setAttribute('value', '');
+		option.appendChild(document.createTextNode(''));
+		//if (entrance.oneway) select.setAttribute('disabled', true);
+		select.appendChild(option);
+
+		for (let exit of DOORS)
+		{
+			if (entrance != exit)
+			{
+				option = document.createElement('option');
+				option.setAttribute('value', exit.name);
+				option.appendChild(document.createTextNode(exit.display));
+				select.appendChild(option);
+			}
+		}
+		select.setAttribute('id', entrance.name);
+		select.oldvalue = '';
+		select.onchange = changeEntranceEvent;
+
+		let ssclone = soulselect.cloneNode(true);
+		ssclone.setAttribute('id', entrance.name + '-count');
+
+		div.appendChild(select);
+		div.appendChild(ssclone);
+		div.appendChild(label);
+		document.querySelector('#soul-list').appendChild(div);
+	}
 }
+
+buildTracker();
+document.querySelector('#full-rando').onchange = buildTracker;
 
 function __addConnection(map, a1, a2)
 {
@@ -450,6 +469,10 @@ function __addConnection(map, a1, a2)
 	map.get(a1.field).push({to: a2.field, via: a1.display});
 }
 
+const GRAIL_FIELDS = [
+	'Yggdrasil', 'Annwfn', 'Battlefield', 'Icefire', 'Divine', 'Frost-Giants', 'GOTD', 'Takamagahara', 'Heaven',
+	'Valhalla', 'DSLM', 'Chaos', 'Malice', 'Eternal-Prison'
+];
 function calculateEscapeRoute(startfield)
 {
 	let edges = new Map(
@@ -464,13 +487,17 @@ function calculateEscapeRoute(startfield)
 		]],
 		['Malice-Top', [{to: 'Malice', via: null}]],
 		['Mausoleum', [{to: 'Guidance', via: "Samaranta's Elevator (A-5)"}]],
-
-		// corridor of blood (locked)
-		['Valhalla', [{to: 'Chaos-Abzu', via: 'Corridor of Blood (C-2)'}]],
-		['Frost-Giants-Back', [{to: 'Eternal-Prison', via: 'Corridor of Blood (C-1)'}]],
-		['DSLM', [{to: 'Frost-Giants-Back', via: 'Corridor of Blood (C-2)'}]],
-		['Chaos-Abzu', [{to: 'Malice', via: 'Corridor of Blood (C-3)'}]],
 	]);
+
+	for (let orig of ['Guidance', 'Mausoleum', 'Surface'])
+	{
+		let name = RENAME_FIELD.get(orig);
+		for (let field of GRAIL_FIELDS)
+		{
+			if (!edges.has(orig)) edges.set(orig, []);
+			edges.get(orig).push({to: field, via: "Holy Grail warp (entering " + name + " activated Holy Grail)"});
+		}
+	}
 
 	for (let entr of ENTRANCES)
 	{
@@ -484,17 +511,13 @@ function calculateEscapeRoute(startfield)
 		}
 	}
 
-	for (let i = 0; i < SOULDOORS.length; ++i)
+	for (let entr of DOORS)
 	{
-		let select1 = document.querySelector('#door-' + i + '-a');
-		let select2 = document.querySelector('#door-' + i + '-b');
-		if (select1.value && select2.value)
+		let select = document.querySelector('#' + entr.name);
+		if (select && select.value)
 		{
-			let door1 = _dmap.get(select1.value);
-			let door2 = _dmap.get(select2.value);
-
-			__addConnection(edges, door1, door2);
-			__addConnection(edges, door2, door1);
+			let exit = _dmap.get(select.value);
+			__addConnection(edges, entr, exit);
 		}
 	}
 
@@ -618,6 +641,39 @@ try
 	function importSpoiler(filename)
 	{
 		let data = fs.readFileSync(filename, 'utf8');
+		for (let line of data.split(/[\r\n]+/)) if (line)
+		{
+			let soulparts = line.trim().split(': Soul Amount ');
+			let lineparts = soulparts[0].trim().split(' - ');
+			if (lineparts.length != 2) continue;
+
+			if (soulparts.length == 1)
+			{
+				let a = getByLogname(ENTRANCES, lineparts[0]);
+				let b = getByLogname(ENTRANCES, lineparts[1]);
+				if (!a || !b) continue;
+
+				let select = document.querySelector('#' + a.name);
+				if (select)
+				{
+					select.value = b.name;
+					changeEntrance(select);
+				}
+			}
+			else
+			{
+				let a = getByLogname(DOORS, lineparts[0]);
+				let b = getByLogname(DOORS, lineparts[1]);
+				if (!a || !b) continue;
+
+				let select = document.querySelector('#' + a.name);
+				if (select)
+				{
+					select.value = b.name;
+					changeEntrance(select);
+				}
+			}
+		}
 		update();
 	}
 
@@ -632,36 +688,53 @@ try
 
 	ipc.on('save', function(e, m)
 	{
-		dialog.showSaveDialog(async (filename) => {
-			if (!filename) return;
+		dialog.showSaveDialog({
+			title: 'Save JSON state file',
+			filters: [
+				{ name: 'JSON file', extensions: ['json'] },
+			],
+		})
+		.then((f) => {
+			if (!f.filePath) return;
 			let json = JSON.stringify([...getState()])
-			fs.writeFileSync(filename, json, 'utf8');
+			fs.writeFileSync(f.filePath, json, 'utf8');
 		});
 	});
 
 	ipc.on('open', function(e, m)
 	{
-		dialog.showOpenDialog({ properties: ['openFile'] },
-			async (filename) => {
-				if (!filename) return;
-				let data = fs.readFileSync(filename[0], 'utf8');
-				setState(new Map(JSON.parse(data)));
-				update();
-			});
+		dialog.showOpenDialog({
+			properties: ['openFile'],
+			title: 'Select JSON state file',
+			filters: [
+				{ name: 'JSON file', extensions: ['json'] },
+			],
+		})
+		.then((f) => {
+			if (!f.filePaths || !f.filePaths[0]) return;
+			let data = fs.readFileSync(f.filePaths[0], 'utf8');
+			setState(new Map(JSON.parse(data)));
+			update();
+		});
 	});
 
 	ipc.on('import-spoiler', function(e, m)
 	{
-		dialog.showOpenDialog({ properties: ['openDirectory'], title: 'Select spoiler directory (containing doors.txt and gates.txt)' },
-			async (flist) => {
-				if (!flist) return;
-				let foldername = flist[0];
-
-				importSpoiler(path.join(foldername, 'spoilers.txt'));
-			});
+		dialog.showOpenDialog({
+			properties: ['openFile'],
+			title: 'Select spoilers.txt',
+			filters: [
+				{ name: 'spoilers.txt', extensions: ['txt'] },
+			],
+		})
+		.then((f) => {
+				if (!f.filePaths || !f.filePaths[0]) return;
+				importSpoiler(f.filePaths[0]);
+		});
 	});
 }
 catch (e)
 {
 	// try-catch to hopefully allow this to run in a browser
+	throw(e);
 }

@@ -32,7 +32,7 @@ h1,h2,h3,h4,h5,h6,strong {
 	padding: 10px;
 }
 
-#entrance-list div, #door-list div {
+#entrance-list div, #door-list div, #soul-list div {
 	margin-bottom: 5px;
 }
 
@@ -43,7 +43,24 @@ h1,h2,h3,h4,h5,h6,strong {
 
 #entrance-list label {
 	display: inline-block;
-	width: 250px;
+	width: 275px;
+	text-align: left;
+	margin-left: 10px;
+}
+
+#soul-list select {
+	width: 210px;
+	margin-left: 10px;
+}
+
+#soul-list select.soulcount {
+	width: 40px;
+	margin-left: 0;
+}
+
+#soul-list label {
+	display: inline-block;
+	width: 275px;
 	text-align: left;
 	margin-left: 10px;
 }

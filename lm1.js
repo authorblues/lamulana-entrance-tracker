@@ -265,11 +265,10 @@ function updateAccessibleExits()
 		['Spring', [{to: 'Sun', via: 'Flooded Reservoir (B-10)'}, {to: 'Surface', via: "Bahamut's Room (C-2)"}]],
 		['Sun', [{to: 'Twin', via: "Ellmac's Chamber (D-6)"}, {to: 'Moonlight', via: "Pyramid Warp (E-3)"}]],
 		['Extinction-Bottom-Main', [{to: 'Extinction', via: null}]],
-		['Mausoleum', [{to: 'Spring', via: "Ribu's Pipe (D-5)"}]],
 		['Ruin-Top', [{to: 'Ruin-Middle', via: null}]],
 		['Ruin-Middle', [{to: 'Ruin', via: null}]],
 		['Inferno', [{to: 'Extinction-Palenque', via: "Viy's Chamber (D-6)"}]],
-		['Mother-Top', [{to: 'Mother-Bottom', via: "Original Shrine of the Mother (Unmarked Door)"}]],
+		['Mother-Top', [{to: 'Mother-Bottom', via: null}]],
 	]);
 
 	let checkeddoors = new Set();
@@ -306,9 +305,8 @@ function updateAccessibleExits()
 	// marking all accessible and unchecked entrances and doors
 	for (let other of ENTRANCES)
 	{
-		let info = _emap.get(other.name);
 		let otherselect = document.querySelector('#' + other.name);
-		if (otherselect && !otherselect.value && canreach.has(info.field))
+		if (otherselect && !otherselect.value && canreach.has(other.field))
 			otherselect.parentNode.classList.add('accessible');
 	}
 
@@ -698,34 +696,49 @@ try
 
 	ipc.on('save', function(e, m)
 	{
-		dialog.showSaveDialog(async (filename) => {
-			if (!filename) return;
+		dialog.showSaveDialog({
+			title: 'Save JSON state file',
+			filters: [
+				{ name: 'JSON file', extensions: ['json'] },
+			],
+		})
+		.then((f) => {
+			if (!f.filePath) return;
 			let json = JSON.stringify([...getState()])
-			fs.writeFileSync(filename, json, 'utf8');
+			fs.writeFileSync(f.filePath, json, 'utf8');
 		});
 	});
 
 	ipc.on('open', function(e, m)
 	{
-		dialog.showOpenDialog({ properties: ['openFile'] },
-			async (filename) => {
-				if (!filename) return;
-				let data = fs.readFileSync(filename[0], 'utf8');
-				setState(new Map(JSON.parse(data)));
-				update();
-			});
+		dialog.showOpenDialog({
+			properties: ['openFile'],
+			title: 'Select JSON state file',
+			filters: [
+				{ name: 'JSON file', extensions: ['json'] },
+			],
+		})
+		.then((f) => {
+			if (!f.filePaths || !f.filePaths[0]) return;
+			let data = fs.readFileSync(f.filePaths[0], 'utf8');
+			setState(new Map(JSON.parse(data)));
+			update();
+		});
 	});
 
 	ipc.on('import-spoiler', function(e, m)
 	{
-		dialog.showOpenDialog({ properties: ['openDirectory'], title: 'Select spoiler directory (containing doors.txt and gates.txt)' },
-			async (flist) => {
-				if (!flist) return;
-				let foldername = flist[0];
+		dialog.showOpenDialog({
+			properties: ['openDirectory'],
+			title: 'Select spoiler directory (containing doors.txt and gates.txt)',
+		})
+		.then((f) => {
+				if (!f.filePaths || !f.filePaths[0]) return;
+				let foldername = f.filePaths[0];
 
 				importDoors(path.join(foldername, 'doors.txt'));
 				importGates(path.join(foldername, 'gates.txt'));
-			});
+		});
 	});
 }
 catch (e)

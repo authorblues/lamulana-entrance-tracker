@@ -3,7 +3,7 @@ let windows = new Map();
 
 function createWindow(name, page, options)
 {
-	let _options = options || {width: 600, height: 800};
+	let _options = options || {width: 625, height: 800, webPreferences: {nodeIntegration: true}};
 	_options.show = false;
 
 	let window = new BrowserWindow(_options);
@@ -39,7 +39,7 @@ app.on('ready', () => {
 		        },
 				{ type: 'separator' },
 				{
-		            label: 'Import Spoiler Log Folder (LM1 Only)',
+		            label: 'Import Spoilers',
                     accelerator: 'CmdOrCtrl+P',
 		            click: function(){ main.webContents.send('import-spoiler'); },
 		        },
@@ -58,9 +58,30 @@ app.on('ready', () => {
 		            click: function(){ main.webContents.send('reset'); },
 		        },
 	        ]
-	    }
+	    },
+		{
+	        label: 'Select Game...',
+	        submenu: [
+				{
+		            label: 'La-Mulana',
+		            click: function(){ main.loadURL(`file://${__dirname}/lm1.html`); },
+		        },
+				{
+		            label: 'La-Mulana 2',
+		            click: function(){ main.loadURL(`file://${__dirname}/lm2.html`); },
+		        },
+	        ]
+	    },
+		{
+	        label: 'Help',
+	        submenu: [
+				{
+		            label: 'Open Devtools',
+		            click: function(){ main.openDevTools('undocked'); },
+		        },
+	        ]
+	    },
 	]));
-	//main.openDevTools();
 });
 
 app.on('window-all-closed', () => {
