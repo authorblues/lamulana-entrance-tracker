@@ -195,7 +195,7 @@ function updateEntranceOptions()
 
 function updateDoorOptions()
 {
-	for (let option of document.querySelectorAll('#soul-list select option'))
+	for (let option of document.querySelectorAll('#soul-list select.doormatch option'))
 		option.classList.remove('used');
 
 	for (let select of document.querySelectorAll('#soul-list select.doormatch'))
@@ -267,7 +267,7 @@ function updateAccessibleExits()
 	]);
 
 	let checkeddoors = new Set();
-	for (let select of document.querySelectorAll('#soul-list select'))
+	for (let select of document.querySelectorAll('#soul-list select.doomatch'))
 		if (select.value) checkeddoors.add(select.value);
 
 	let seen = new Set();
@@ -294,7 +294,7 @@ function updateAccessibleExits()
 		if (select && select.value) _processField(_emap.get(entr.name).field);
 	}
 
-	for (let select of document.querySelectorAll('#soul-list select'))
+	for (let select of document.querySelectorAll('#soul-list select.doormatch'))
 		if (select.value) _processField(_dmap.get(select.value).field);
 
 	// marking all accessible and unchecked entrances and doors
@@ -513,6 +513,9 @@ function calculateEscapeRoute(startfield)
 
 	for (let entr of DOORS)
 	{
+		// when boat drops (incl during escape), can no longer use this door
+		if (entr.name == "soul-ib-boat") continue;
+
 		let select = document.querySelector('#' + entr.name);
 		if (select && select.value)
 		{
@@ -672,6 +675,9 @@ try
 					select.value = b.name;
 					changeEntrance(select);
 				}
+
+				document.querySelector('#' + a.name + '-count').value = soulparts[1];
+				document.querySelector('#' + b.name + '-count').value = soulparts[1];
 			}
 		}
 		update();
