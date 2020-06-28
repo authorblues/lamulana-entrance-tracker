@@ -1,6 +1,6 @@
 {
 	"name": "ruins-mapper",
-	"version": "2.24.2",
+	"version": "2.24.3",
 	"description": "A basic entrance tracker for La-Mulana Randomizer",
 	"main": "main.js",
 	"scripts": {

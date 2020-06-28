@@ -90,9 +90,9 @@ const DOORS =
 	{"name": "soul-ib-bl", "display": "Imm Battlefield Bottom Left Soul Gate (B-7)", "field": "Battlefield-Left", "logname": "Immortal Battlefield Three Soul Gate (B-7)"},
 	{"name": "soul-ib-boat", "display": "Imm Battlefield Spiral Boat Soul Gate (D-4)", "field": "Battlefield-Boat", "logname": "Immortal Battlefield Nine Soul Gate(D-4)"},
 	{"name": "soul-icefire-rat", "display": "Icefire Under Ratatoskr Soul Gate (G-3)", "field": "Icefire", "logname": "Icefire Treetop Three Soul Gate (G-3)"},
-	{"name": "soul-icefire-vid", "display": "Icefire Vidofnir Soul Gate (D-6)", "field": "Icefire", "logname": "Icefire Treetop Five Soul (D-6)"},
+	{"name": "soul-icefire-vid", "display": "Icefire Vidofnir Soul Gate (D-6)", "field": "Icefire-Vidofnir", "logname": "Icefire Treetop Five Soul (D-6)"},
 	{"name": "soul-df-main", "display": "Divine Fortress Bottom Left Soul Gate (C-5)", "field": "Divine", "logname": "Divine Fortress Soul Gate (C-5)"},
-	{"name": "soul-frost-balor", "display": "Frost Giants Balor Soul Gate (E-1)", "field": "Frost-Giants", "logname": "Shrine of the Frost Giants Five Soul Gate (E-1)"},
+	{"name": "soul-frost-balor", "display": "Frost Giants Balor Soul Gate (E-1)", "field": "Frost-Giants-Balor", "logname": "Shrine of the Frost Giants Five Soul Gate (E-1)"},
 	{"name": "soul-frost-main", "display": "Frost Giants Main Soul Gate (E-4)", "field": "Frost-Giants", "logname": "Shrine of the Frost Giants Two Soul Gate (E-4)"},
 	{"name": "soul-gotd-main", "display": "Gate of the Dead Main Soul Gate (C-4)", "field": "GOTD", "logname": "Gate of the Dead Soul Gate (C-4)"},
 	{"name": "soul-taka-top", "display": "Takamagahara Top Main Soul Gate (D-1)", "field": "Takamagahara", "logname": "Takamagahara Shrine Three Soul Gate (D-1)"},
@@ -126,10 +126,12 @@ const RENAME_FIELD = new Map(
 	["Endless", "Endless Corridor"],
 	["Frost-Giants", "Shrine of the Frost Giants"],
 	["Frost-Giants-Back", "Shrine of the Frost Giants"],
+	["Frost-Giants-Balor", "Shrine of the Frost Giants"],
 	["GOTD", "Gate of the Dead"],
 	["Guidance", "Gate of Guidance"],
 	["Heaven", "Heaven's Labyrinth"],
 	["Icefire", "Icefire Treetop"],
+	["Icefire-Vidofnir", "Icefire Treetop"],
 	["Illusion", "Gate of Illusion"],
 	["Malice", "Hall of Malice"],
 	["Malice-Top", "Hall of Malice"],
@@ -227,6 +229,8 @@ function updateAccessibleExits()
 			{to: 'Chaos-Abzu', via: 'Corridor of Blood (C-4)'},
 			{to: 'Malice', via: 'Corridor of Blood (C-4)'},
 		]],
+		['Frost-Giants', [{to: 'Frost-Giants-Balor', via: null}]],
+		['Icefire', [{to: 'Icefire-Vidofnir', via: null}]],
 		['Malice-Top', [{to: 'Malice', via: null}]],
 		['Mausoleum', [{to: 'Guidance', via: "Samaranta's Elevator (A-5)"}]],
 
@@ -300,6 +304,7 @@ function updateAccessibleExits()
 	// marking all accessible and unchecked entrances and doors
 	for (let other of ENTRANCES)
 	{
+		if (other.oneway) continue;
 		let otherselect = document.querySelector('#' + other.name);
 		if (otherselect && !otherselect.value && canreach.has(other.field))
 			otherselect.parentNode.classList.add('accessible');
@@ -485,13 +490,17 @@ function calculateEscapeRoute(startfield)
 			{to: 'Takamagahara', via: 'Any Unmarked Door (IGT seconds 0-15)'},
 			{to: 'Divine', via: 'Any Unmarked Door (IGT seconds 45-0)'},
 		]],
+		['Frost-Giants', [{to: 'Frost-Giants-Balor', via: null}]],
+		['Icefire', [{to: 'Icefire-Vidofnir', via: null}]],
 		['Malice-Top', [{to: 'Malice', via: null}]],
 		['Mausoleum', [{to: 'Guidance', via: "Samaranta's Elevator (A-5)"}]],
 	]);
 
-	for (let orig of ['Guidance', 'Mausoleum', 'Surface'])
+	for (let orig of ['Guidance', 'Mausoleum', 'Surface', 'DSLM'])
 	{
 		let name = RENAME_FIELD.get(orig);
+		if (orig == 'DSLM') name = 'Nibiru';
+
 		for (let field of GRAIL_FIELDS)
 		{
 			if (!edges.has(orig)) edges.set(orig, []);

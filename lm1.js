@@ -305,6 +305,8 @@ function updateAccessibleExits()
 	// marking all accessible and unchecked entrances and doors
 	for (let other of ENTRANCES)
 	{
+		if (other.oneway) continue;
+
 		let otherselect = document.querySelector('#' + other.name);
 		if (otherselect && !otherselect.value && canreach.has(other.field))
 			otherselect.parentNode.classList.add('accessible');
