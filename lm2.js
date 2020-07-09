@@ -496,7 +496,7 @@ function calculateEscapeRoute(startfield)
 		['Mausoleum', [{to: 'Guidance', via: "Samaranta's Elevator (A-5)"}]],
 	]);
 
-	for (let orig of ['Guidance', 'Mausoleum', 'Surface'])
+	for (let orig of ['Guidance', 'Mausoleum', 'Surface', 'Illusion'])
 	{
 		let name = RENAME_FIELD.get(orig);
 		for (let field of GRAIL_FIELDS)
