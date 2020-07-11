@@ -475,6 +475,7 @@ function __addConnection(map, a1, a2)
 }
 
 const GRAIL_FIELDS = [
+	'Surface',
 	'Yggdrasil', 'Annwfn', 'Battlefield', 'Icefire', 'Divine', 'Frost-Giants', 'GOTD', 'Takamagahara', 'Heaven',
 	'Valhalla', 'DSLM', 'Chaos', 'Malice', 'Eternal-Prison'
 ];
