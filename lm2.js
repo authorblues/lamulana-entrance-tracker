@@ -230,7 +230,6 @@ function updateAccessibleExits()
 
 	let edges = new Map(
 	[
-		['Annwfn', [{to: 'Battlefield', via: "Bifrost (C-5)"}]],
 		['Annwfn-Lower', [{to: 'Annwfn', via: null}]],
 		['Battlefield-Left', [{to: 'Battlefield', via: null}]],
 		['Battlefield-Boat', [{to: 'Battlefield', via: null}]],
@@ -515,7 +514,6 @@ function calculateEscapeRoute(startfield)
 {
 	let edges = new Map(
 	[
-		['Annwfn', [{to: 'Battlefield', via: "Bifrost (C-5)"}]],
 		['Annwfn-Lower', [{to: 'Annwfn', via: null}]],
 		['Battlefield-Left', [{to: 'Battlefield', via: null}]],
 		['Battlefield-Boat', [{to: 'Battlefield', via: null}]],
