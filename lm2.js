@@ -7,75 +7,88 @@ const Direction =
 	UP: 'up',
 	DOWN: 'down',
 	GATE: 'gate',
+	DROP: 'drop',
 };
 
 const DIRECTION_MATCH = new Map(
 [
+	// ladders and side doors
 	[Direction.LEFT, Direction.RIGHT],
 	[Direction.RIGHT, Direction.LEFT],
 	[Direction.UP, Direction.DOWN],
 	[Direction.DOWN, Direction.UP],
+
+	// one way drops and falls
+	[Direction.DROP, Direction.DROP],
+
+	// gates connect to one another
 	[Direction.GATE, Direction.GATE],
 ]);
 
 const ENTRANCES =
 [
-	{"name": "surface-main", "display": "Surface Main (F-5)", "oneway": false, "field": "Surface", "type": Direction.RIGHT, "logname": "Village of Departure Main (F-5)"},
-	{"name": "surface-ladder", "display": "Surface Ladder Down (F-3)", "oneway": false, "field": "Surface", "type": Direction.DOWN, "logname": "Village of Departure Ladder (F-3)"},
+	{"name": "surface-main", "display": "Surface Main (F-5)", "oneway": false, "field": "Surface", "type": Direction.RIGHT, "logname": "Village of Departure Main (F-5)", "default": null},
+	{"name": "surface-ladder", "display": "Surface Ladder Down (F-3)", "oneway": false, "field": "Surface", "type": Direction.DOWN, "logname": "Village of Departure Ladder (F-3)", "default": null},
 
-	{"name": "guidance-main", "display": "Guidance Main Entrance (C-1)", "oneway": false, "field": "Guidance", "type": Direction.LEFT, "logname": "Gate of Guidance Main (C-1)"},
-	{"name": "guidance-down", "display": "Guidance Ladder Down (A-6)", "oneway": false, "field": "Guidance", "type": Direction.DOWN, "logname": "Gate of Guidance Ladder (A-6)"},
-	{"name": "guidance-left-gate", "display": "Guidance Left Gate (A-3)", "oneway": false, "field": "Guidance", "type": Direction.GATE, "logname": "Gate of Guidance Gate (A-3)"},
+	{"name": "guidance-main", "display": "Guidance Main Entrance (C-1)", "oneway": false, "field": "Guidance", "type": Direction.LEFT, "logname": "Gate of Guidance Main (C-1)", "default": null},
+	{"name": "guidance-down", "display": "Guidance Ladder Down (A-6)", "oneway": false, "field": "Guidance", "type": Direction.DOWN, "logname": "Gate of Guidance Ladder (A-6)", "default": null},
+	{"name": "guidance-left-gate", "display": "Guidance Left Gate (A-3)", "oneway": false, "field": "Guidance", "type": Direction.GATE, "logname": "Gate of Guidance Gate (A-3)", "default": null},
 
-	{"name": "maus-left", "display": "Mausoleum Bottom Left (A-5)", "oneway": false, "field": "Mausoleum", "type": Direction.LEFT, "logname": "Mausoleum of Giants Left Door (A-5)"},
-	{"name": "maus-up", "display": "Mausoleum Main Ladder Up (A-1)", "oneway": false, "field": "Mausoleum", "type": Direction.UP, "logname": "Mausoleum of Giants Ladder (A-1)"},
+	{"name": "maus-left", "display": "Mausoleum Bottom Left (A-5)", "oneway": false, "field": "Mausoleum", "type": Direction.LEFT, "logname": "Mausoleum of Giants Left Door (A-5)", "default": null},
+	{"name": "maus-up", "display": "Mausoleum Main Ladder Up (A-1)", "oneway": false, "field": "Mausoleum", "type": Direction.UP, "logname": "Mausoleum of Giants Ladder (A-1)", "default": null},
 
-	{"name": "endless-corridor", "display": "Endless Corridor (C-1)", "oneway": false, "field": "Endless", "type": Direction.RIGHT, "logname": "Endless Corridor (C-1)"},
+	{"name": "endless-corridor", "display": "Endless Corridor (C-1)", "oneway": false, "field": "Endless", "type": Direction.RIGHT, "logname": "Endless Corridor (C-1)", "default": null},
 
-	{"name": "illusion-left", "display": "Gate of Illusion Left Gate (A-1)", "oneway": false, "field": "Illusion", "type": Direction.GATE, "logname": "Gate of Illusion Left Gate (A-1)"},
-	{"name": "illusion-right", "display": "Gate of Illusion Right Gate (C-1)", "oneway": false, "field": "Illusion", "type": Direction.GATE, "logname": "Gate of Illusion Right Gate (C-1)"},
+	{"name": "illusion-left", "display": "Gate of Illusion Left Gate (A-1)", "oneway": false, "field": "Illusion", "type": Direction.GATE, "logname": "Gate of Illusion Left Gate (A-1)", "default": null},
+	{"name": "illusion-right", "display": "Gate of Illusion Right Gate (C-1)", "oneway": false, "field": "Illusion", "type": Direction.GATE, "logname": "Gate of Illusion Right Gate (C-1)", "default": null},
 
-	{"name": "cavern-left", "display": "Cavern Left (A-1)", "oneway": false, "field": "Cavern", "type": Direction.LEFT, "logname": "Cavern Left Door (A-1)"},
-	{"name": "cavern-right", "display": "Cavern Right (D-1)", "oneway": false, "field": "Cavern", "type": Direction.RIGHT, "logname": "Cavern Right Door (D-1)"},
-	{"name": "cliff", "display": "Cliff (A-1)", "oneway": false, "field": "Cliff", "type": Direction.LEFT, "logname": "Cliff (A-1)"},
+	{"name": "cavern-left", "display": "Cavern Left (A-1)", "oneway": false, "field": "Cavern", "type": Direction.LEFT, "logname": "Cavern Left Door (A-1)", "default": null},
+	{"name": "cavern-right", "display": "Cavern Right (D-1)", "oneway": false, "field": "Cavern", "type": Direction.RIGHT, "logname": "Cavern Right Door (D-1)", "default": null},
+	{"name": "cliff", "display": "Cliff (A-1)", "oneway": false, "field": "Cliff", "type": Direction.LEFT, "logname": "Cliff (A-1)", "default": null},
 
-	{"name": "ygg-main-gate", "display": "Yggdrasil Main Gate (D-4)", "oneway": false, "field": "Yggdrasil", "type": Direction.GATE, "logname": "Roots of Yggdrasil Main (D-4)"},
-	{"name": "ygg-tl-gate", "display": "Yggdrasil Top Left Switch Gate (A-1)", "oneway": false, "field": "Yggdrasil", "type": Direction.GATE, "logname": "Roots of Yggdrasil Top Left Gate (A-1)"},
-	{"name": "ygg-tm-gate", "display": "Yggdrasil Top Middle Nidhogg Gate (D-1)", "oneway": false, "field": "Yggdrasil", "type": Direction.GATE, "logname": "Roots of Yggdrasil Top Middle Gate (D-1)"},
-	{"name": "ygg-tr-gate", "display": "Yggdrasil Top Right Birth Gate (G-1)", "oneway": false, "field": "Yggdrasil", "type": Direction.GATE, "logname": "Roots of Yggdrasil Top Right Gate (G-1)"},
-	{"name": "ygg-bottom", "display": "Yggdrasil Ladder Down Left (C-5)", "oneway": false, "field": "Yggdrasil", "type": Direction.DOWN, "logname": "Roots of Yggdrasil Ladder (C-5)"},
+	{"name": "ygg-main-gate", "display": "Yggdrasil Main Gate (D-4)", "oneway": false, "field": "Yggdrasil", "type": Direction.GATE, "logname": "Roots of Yggdrasil Main (D-4)", "default": null},
+	{"name": "ygg-tl-gate", "display": "Yggdrasil Top Left Switch Gate (A-1)", "oneway": false, "field": "Yggdrasil", "type": Direction.GATE, "logname": "Roots of Yggdrasil Top Left Gate (A-1)", "default": null},
+	{"name": "ygg-tm-gate", "display": "Yggdrasil Top Middle Nidhogg Gate (D-1)", "oneway": false, "field": "Yggdrasil", "type": Direction.GATE, "logname": "Roots of Yggdrasil Top Middle Gate (D-1)", "default": null},
+	{"name": "ygg-tr-gate", "display": "Yggdrasil Top Right Birth Gate (G-1)", "oneway": false, "field": "Yggdrasil", "type": Direction.GATE, "logname": "Roots of Yggdrasil Top Right Gate (G-1)", "default": null},
+	{"name": "ygg-bottom", "display": "Yggdrasil Ladder Down Left (C-5)", "oneway": false, "field": "Yggdrasil", "type": Direction.DOWN, "logname": "Roots of Yggdrasil Ladder (C-5)", "default": null},
 
-	{"name": "annwfn-main-top", "display": "Annwfn Main Ladder Up (C-1)", "oneway": false, "field": "Annwfn", "type": Direction.UP, "logname": "Annwfn Ladder (C-1)"},
-	{"name": "annwfn-bottom", "display": "Annwfn Bottom One-Way Ladder (F-1)", "oneway": true, "field": "Annwfn", "type": Direction.DOWN, "logname": "Annwfn Bottom (E-5)"},
-	{"name": "annwfn-br-gate", "display": "Annwfn Bottom Right Gate (G-4)", "oneway": false, "field": "Annwfn-Lower", "type": Direction.GATE, "logname": "Annwfn Gate (G-4)"},
+	{"name": "annwfn-main-top", "display": "Annwfn Main Ladder Up (C-1)", "oneway": false, "field": "Annwfn", "type": Direction.UP, "logname": "Annwfn Ladder (C-1)", "default": null},
+	{"name": "annwfn-bottom", "display": "Annwfn Bottom One-Way Ladder (F-1)", "oneway": true, "field": "Annwfn", "type": Direction.DOWN, "logname": "Annwfn Bottom (E-5)", "default": null},
+	{"name": "annwfn-br-gate", "display": "Annwfn Bottom Right Gate (G-4)", "oneway": false, "field": "Annwfn-Lower", "type": Direction.GATE, "logname": "Annwfn Gate (G-4)", "default": null},
+	{"name": "annwfn-bifrost", "display": "Annwfn Bifrost (C-5)", "oneway": false, "field": "Annwfn", "type": Direction.DROP, "logname": "", "default": "ib-bifrost"},
 
-	{"name": "ib-left-gate", "display": "Imm Battlefield Left Side Gate (A-6)", "oneway": false, "field": "Battlefield-Left", "type": Direction.GATE, "logname": "Immortal Battlefield Gate (A-6)"},
-	{"name": "ib-top", "display": "Imm Battlefield Cetas Ladder Up (F-1)", "oneway": false, "field": "Battlefield", "type": Direction.UP, "logname": "Immortal Battlefield Up Ladder (F-1)"},
-	{"name": "ib-right", "display": "Imm Battlefield Right (H-4)", "oneway": false, "field": "Battlefield", "type": Direction.RIGHT, "logname": "Immortal Battlefield Right Door (H-4)"},
-	{"name": "ib-bottom-wheel", "display": "Imm Battlefield Wheel Ladder Down (D-7)", "oneway": false, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Down Ladder near Spinning Wheel (D-7)"},
-	{"name": "ib-buried-fortress", "display": "Imm Battlefield Alviss Ladder Down (G-7)", "oneway": false, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Down Ladder below Battery Chest (G-7)"},
-	{"name": "ib-bottom-moon", "display": "Imm Battlefield Moon Altar Hallway (G-7)", "oneway": true, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Moon Altar Hallway (G-7)"},
+	{"name": "ib-left-gate", "display": "Imm Battlefield Left Side Gate (A-6)", "oneway": false, "field": "Battlefield-Left", "type": Direction.GATE, "logname": "Immortal Battlefield Gate (A-6)", "default": null},
+	{"name": "ib-bifrost", "display": "Imm Battlefield Bifrost Fall (D-1)", "oneway": true, "field": "Battlefield", "type": Direction.DROP, "logname": "", "default": "annwfn-bifrost"},
+	{"name": "ib-top", "display": "Imm Battlefield Cetas Ladder Up (F-1)", "oneway": false, "field": "Battlefield", "type": Direction.UP, "logname": "Immortal Battlefield Up Ladder (F-1)", "default": null},
+	{"name": "ib-right", "display": "Imm Battlefield Right (H-4)", "oneway": false, "field": "Battlefield", "type": Direction.RIGHT, "logname": "Immortal Battlefield Right Door (H-4)", "default": null},
+	{"name": "ib-bottom-wheel", "display": "Imm Battlefield Wheel Ladder Down (D-7)", "oneway": false, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Down Ladder near Spinning Wheel (D-7)", "default": null},
+	{"name": "ib-buried-fortress", "display": "Imm Battlefield Alviss Ladder Down (G-7)", "oneway": false, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Down Ladder below Battery Chest (G-7)", "default": null},
+	{"name": "ib-bottom-moon", "display": "Imm Battlefield Moon Altar Hallway (G-7)", "oneway": true, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Moon Altar Hallway (G-7)", "default": null},
 
-	{"name": "icefire-mid-gate", "display": "Icefire Middle Gate (D-3)", "oneway": false, "field": "Icefire", "type": Direction.GATE, "logname": "Icefire Treetop Gate (D-3)"},
-	{"name": "icefire-fire-up", "display": "Icefire Fire Side Ladder Up (C-1)", "oneway": false, "field": "Icefire", "type": Direction.UP, "logname": "Icefire Treetop Ladder Fire Side (C-1)"},
-	{"name": "icefire-ice-lt-up", "display": "Icefire Ice Side Left Ladder Up (F-1)", "oneway": false, "field": "Icefire", "type": Direction.UP, "logname": "Icefire Treetop Left Ladder Ice Side (F-1)"},
-	{"name": "icefire-ice-rt-up", "display": "Icefire Ice Side Right Ladder Up (F-1)", "oneway": false, "field": "Icefire", "type": Direction.UP, "logname": "Icefire Treetop Right Ladder Ice Side (F-1)"},
+	{"name": "icefire-mid-gate", "display": "Icefire Middle Gate (D-3)", "oneway": false, "field": "Icefire", "type": Direction.GATE, "logname": "Icefire Treetop Gate (D-3)", "default": null},
+	{"name": "icefire-fire-up", "display": "Icefire Fire Side Ladder Up (C-1)", "oneway": false, "field": "Icefire", "type": Direction.UP, "logname": "Icefire Treetop Ladder Fire Side (C-1)", "default": null},
+	{"name": "icefire-ice-lt-up", "display": "Icefire Ice Side Left Ladder Up (F-1)", "oneway": false, "field": "Icefire", "type": Direction.UP, "logname": "Icefire Treetop Left Ladder Ice Side (F-1)", "default": null},
+	{"name": "icefire-ice-rt-up", "display": "Icefire Ice Side Right Ladder Up (F-1)", "oneway": false, "field": "Icefire", "type": Direction.UP, "logname": "Icefire Treetop Right Ladder Ice Side (F-1)", "default": null},
 
-	{"name": "df-twins-gate", "display": "Divine Fortress Gate near Twins (A-3)", "oneway": false, "field": "Divine", "type": Direction.GATE, "logname": "Divine Fortress Gate (A-3)"},
+	{"name": "df-twins-gate", "display": "Divine Fortress Gate near Twins (A-3)", "oneway": false, "field": "Divine", "type": Direction.GATE, "logname": "Divine Fortress Gate (A-3)", "default": null},
 
-	{"name": "frost-berg-gate", "display": "Frost Giants Bergelmir Gate (B-4)", "oneway": false, "field": "Frost-Giants", "type": Direction.GATE, "logname": "Shrine of the Frost Giants Gate (B-4)"},
-	{"name": "frost-back-gate", "display": "Frost Giants Backside Gate (B-2)", "oneway": false, "field": "Frost-Giants-Back", "type": Direction.GATE, "logname": "Shrine of the Frost Giants Backside (B-2)"},
+	{"name": "frost-berg-gate", "display": "Frost Giants Bergelmir Gate (B-4)", "oneway": false, "field": "Frost-Giants", "type": Direction.GATE, "logname": "Shrine of the Frost Giants Gate (B-4)", "default": null},
+	{"name": "frost-back-gate", "display": "Frost Giants Backside Gate (B-2)", "oneway": false, "field": "Frost-Giants-Back", "type": Direction.GATE, "logname": "Shrine of the Frost Giants Backside (B-2)", "default": null},
 
-	{"name": "gotd-4switches-gate", "display": "Gate of the Dead 4 Switches Gate (F-5)", "oneway": false, "field": "GOTD", "type": Direction.GATE, "logname": "Gate of the Dead Gate (F-5)"},
-	{"name": "taka-bottom-gate", "display": "Takamagahara Shrine Bottom Gate (C-7)", "oneway": false, "field": "Takamagahara", "type": Direction.GATE, "logname": "Takamagahara Shrine Gate (C-7)"},
-	{"name": "hlab-chaos-gate", "display": "Heaven's Labyrinth Gate near Chaos (D-1)", "oneway": false, "field": "Heaven", "type": Direction.GATE, "logname": "Heavens Labyrinth Gate (D-1)"},
+	{"name": "gotd-4switches-gate", "display": "Gate of the Dead 4 Switches Gate (F-5)", "oneway": false, "field": "GOTD", "type": Direction.GATE, "logname": "Gate of the Dead Gate (F-5)", "default": null},
+	{"name": "taka-bottom-gate", "display": "Takamagahara Shrine Bottom Gate (C-7)", "oneway": false, "field": "Takamagahara", "type": Direction.GATE, "logname": "Takamagahara Shrine Gate (C-7)", "default": null},
+	{"name": "taka-dragons-neck", "display": "Takamagahara Dragon's Neck (F-3)", "oneway": false, "field": "Takamagahara", "type": Direction.DROP, "logname": "", "default": "hlab-monsters-jaw"},
+	{"name": "hlab-chaos-gate", "display": "Heaven's Labyrinth Gate near Chaos (D-1)", "oneway": false, "field": "Heaven", "type": Direction.GATE, "logname": "Heavens Labyrinth Gate (D-1)", "default": null},
+	{"name": "hlab-monsters-jaw", "display": "Heaven's Lab Monster's Jaw (A-5)", "oneway": true, "field": "Heaven", "type": Direction.DROP, "logname": "", "default": "taka-dragons-neck"},
 
-	{"name": "valhalla-gate", "display": "Valhalla Main Gate (A-2)", "oneway": false, "field": "Valhalla", "type": Direction.GATE, "logname": "Valhalla Gate (A-2)"},
-	{"name": "dslm-main-gate", "display": "Dark Star Lord's Maus Main Gate (D-7)", "oneway": false, "field": "DSLM", "type": Direction.GATE, "logname": "Dark Star Lord's Mausoleum Gate (D-7)"},
-	{"name": "chaos-main-gate", "display": "Ancient Chaos Main Gate (D-6)", "oneway": false, "field": "Chaos", "type": Direction.GATE, "logname": "Ancient Chaos Gate (D-6)"},
-	{"name": "malice-top-gate", "display": "Hall of Malice Top Gate (C-1)", "oneway": false, "field": "Malice-Top", "type": Direction.GATE, "logname": "Hall of Malice Gate (C-1)"},
+	{"name": "valhalla-gate", "display": "Valhalla Main Gate (A-2)", "oneway": false, "field": "Valhalla", "type": Direction.GATE, "logname": "Valhalla Gate (A-2)", "default": null},
+	{"name": "dslm-main-gate", "display": "Dark Star Lord's Maus Main Gate (D-7)", "oneway": false, "field": "DSLM", "type": Direction.GATE, "logname": "Dark Star Lord's Mausoleum Gate (D-7)", "default": null},
+	{"name": "dslm-pyramid-nibiru", "display": "DSLM Pyramid to Nibiru (D-3)", "oneway": false, "field": "DSLM", "type": Direction.DROP, "logname": "", "default": "nibiru"},
+	{"name": "chaos-main-gate", "display": "Ancient Chaos Main Gate (D-6)", "oneway": false, "field": "Chaos", "type": Direction.GATE, "logname": "Ancient Chaos Gate (D-6)", "default": null},
+	{"name": "malice-top-gate", "display": "Hall of Malice Top Gate (C-1)", "oneway": false, "field": "Malice-Top", "type": Direction.GATE, "logname": "Hall of Malice Gate (C-1)", "default": null},
 
-	{"name": "inferno-echidna", "display": "Inferno Cavern, Echidna's Chamber (B-1)", "oneway": true, "field": "Echidna", "type": Direction.UP, "logname": "Inferno Cavern (B-1)"},
+	{"name": "nibiru", "display": "Nibiru (B-3)", "oneway": false, "field": "Nibiru", "type": Direction.DROP, "logname": "", "default": "dslm-pyramid-nibiru"},
+	{"name": "inferno-echidna", "display": "Inferno Cavern, Echidna's Chamber (B-1)", "oneway": true, "field": "Echidna", "type": Direction.UP, "logname": "Inferno Cavern (B-1)", "default": null},
 ];
 
 let _emap = new Map();
@@ -84,24 +97,24 @@ for (let entr of ENTRANCES)
 
 const DOORS =
 [
-	{"name": "soul-ygg-bottom", "display": "Yggdrasil Bottom Soul Gate (D-6)", "field": "Yggdrasil", "logname": "Roots of Yggdrasil Soul Gate (D-6)"},
-	{"name": "soul-annwfn-bl", "display": "Annwfn Bottom Left Soul Gate (A-4)", "field": "Annwfn", "logname": "Annwfn Soul Gate (A-4)"},
-	{"name": "soul-ib-tr", "display": "Imm Battlefield Top Right Soul Gate (H-2)", "field": "Battlefield", "logname": "Immortal Battlefield Two Soul Gate (H-2)"},
-	{"name": "soul-ib-bl", "display": "Imm Battlefield Bottom Left Soul Gate (B-7)", "field": "Battlefield-Left", "logname": "Immortal Battlefield Three Soul Gate (B-7)"},
-	{"name": "soul-ib-boat", "display": "Imm Battlefield Spiral Boat Soul Gate (D-4)", "field": "Battlefield-Boat", "logname": "Immortal Battlefield Nine Soul Gate(D-4)"},
-	{"name": "soul-icefire-rat", "display": "Icefire Under Ratatoskr Soul Gate (G-3)", "field": "Icefire", "logname": "Icefire Treetop Three Soul Gate (G-3)"},
-	{"name": "soul-icefire-vid", "display": "Icefire Vidofnir Soul Gate (D-6)", "field": "Icefire-Vidofnir", "logname": "Icefire Treetop Five Soul (D-6)"},
-	{"name": "soul-df-main", "display": "Divine Fortress Bottom Left Soul Gate (C-5)", "field": "Divine", "logname": "Divine Fortress Soul Gate (C-5)"},
-	{"name": "soul-frost-balor", "display": "Frost Giants Balor Soul Gate (E-1)", "field": "Frost-Giants-Balor", "logname": "Shrine of the Frost Giants Five Soul Gate (E-1)"},
-	{"name": "soul-frost-main", "display": "Frost Giants Main Soul Gate (E-4)", "field": "Frost-Giants", "logname": "Shrine of the Frost Giants Two Soul Gate (E-4)"},
-	{"name": "soul-gotd-main", "display": "Gate of the Dead Main Soul Gate (C-4)", "field": "GOTD", "logname": "Gate of the Dead Soul Gate (C-4)"},
-	{"name": "soul-taka-top", "display": "Takamagahara Top Main Soul Gate (D-1)", "field": "Takamagahara", "logname": "Takamagahara Shrine Three Soul Gate (D-1)"},
-	{"name": "soul-taka-main", "display": "Takamagahara Belial Soul Gate (B-1)", "field": "Takamagahara-Belial", "logname": "Takamagahara Shrine Five Soul Gate (B-1)"},
-	{"name": "soul-hlab-main", "display": "Heaven's Labyrinth Main Soul Gate (E-5)", "field": "Heaven", "logname": "Heavens Labyrinth Soul Gate (E-5)"},
-	{"name": "soul-valhalla-tr", "display": "Valhalla Top Right Soul Gate (E-2)", "field": "Valhalla", "logname": "Valhalla Soul Gate (E-2)"},
-	{"name": "soul-chaos-abzu", "display": "Ancient Chaos Abzu/Corridor Soul Gate (C-1)", "field": "Chaos-Abzu", "logname": "Ancient Chaos Soul Gate (C-1)"},
-	{"name": "soul-malice", "display": "Hall of Malice Hidden Soul Gate (D-3)", "field": "Malice", "logname": "Hall of Malice Soul Gate (D-3)"},
-	{"name": "soul-ep-gloom", "display": "Eternal Prison Gloom Charon Soul Gate (D-2)", "field": "Eternal-Prison", "logname": "Eternal Prison Gloom Soul Gate (D-2)"},
+	{"name": "soul-ygg-bottom", "display": "Yggdrasil Bottom Soul Gate (D-6)", "field": "Yggdrasil", "logname": "Roots of Yggdrasil Soul Gate (D-6)", "default": null},
+	{"name": "soul-annwfn-bl", "display": "Annwfn Bottom Left Soul Gate (A-4)", "field": "Annwfn", "logname": "Annwfn Soul Gate (A-4)", "default": null},
+	{"name": "soul-ib-tr", "display": "Imm Battlefield Top Right Soul Gate (H-2)", "field": "Battlefield", "logname": "Immortal Battlefield Two Soul Gate (H-2)", "default": null},
+	{"name": "soul-ib-bl", "display": "Imm Battlefield Bottom Left Soul Gate (B-7)", "field": "Battlefield-Left", "logname": "Immortal Battlefield Three Soul Gate (B-7)", "default": null},
+	{"name": "soul-ib-boat", "display": "Imm Battlefield Spiral Boat Soul Gate (D-4)", "field": "Battlefield-Boat", "logname": "Immortal Battlefield Nine Soul Gate(D-4)", "default": null},
+	{"name": "soul-icefire-rat", "display": "Icefire Under Ratatoskr Soul Gate (G-3)", "field": "Icefire", "logname": "Icefire Treetop Three Soul Gate (G-3)", "default": null},
+	{"name": "soul-icefire-vid", "display": "Icefire Vidofnir Soul Gate (D-6)", "field": "Icefire-Vidofnir", "logname": "Icefire Treetop Five Soul (D-6)", "default": null},
+	{"name": "soul-df-main", "display": "Divine Fortress Bottom Left Soul Gate (C-5)", "field": "Divine", "logname": "Divine Fortress Soul Gate (C-5)", "default": null},
+	{"name": "soul-frost-balor", "display": "Frost Giants Balor Soul Gate (E-1)", "field": "Frost-Giants-Balor", "logname": "Shrine of the Frost Giants Five Soul Gate (E-1)", "default": null},
+	{"name": "soul-frost-main", "display": "Frost Giants Main Soul Gate (E-4)", "field": "Frost-Giants", "logname": "Shrine of the Frost Giants Two Soul Gate (E-4)", "default": null},
+	{"name": "soul-gotd-main", "display": "Gate of the Dead Main Soul Gate (C-4)", "field": "GOTD", "logname": "Gate of the Dead Soul Gate (C-4)", "default": null},
+	{"name": "soul-taka-top", "display": "Takamagahara Top Main Soul Gate (D-1)", "field": "Takamagahara", "logname": "Takamagahara Shrine Three Soul Gate (D-1)", "default": null},
+	{"name": "soul-taka-main", "display": "Takamagahara Belial Soul Gate (B-1)", "field": "Takamagahara-Belial", "logname": "Takamagahara Shrine Five Soul Gate (B-1)", "default": null},
+	{"name": "soul-hlab-main", "display": "Heaven's Labyrinth Main Soul Gate (E-5)", "field": "Heaven", "logname": "Heavens Labyrinth Soul Gate (E-5)", "default": null},
+	{"name": "soul-valhalla-tr", "display": "Valhalla Top Right Soul Gate (E-2)", "field": "Valhalla", "logname": "Valhalla Soul Gate (E-2)", "default": null},
+	{"name": "soul-chaos-abzu", "display": "Ancient Chaos Abzu/Corridor Soul Gate (C-1)", "field": "Chaos-Abzu", "logname": "Ancient Chaos Soul Gate (C-1)", "default": null},
+	{"name": "soul-malice", "display": "Hall of Malice Hidden Soul Gate (D-3)", "field": "Malice", "logname": "Hall of Malice Soul Gate (D-3)", "default": null},
+	{"name": "soul-ep-gloom", "display": "Eternal Prison Gloom Charon Soul Gate (D-2)", "field": "Eternal-Prison", "logname": "Eternal Prison Gloom Soul Gate (D-2)", "default": null},
 ];
 
 let _dmap = new Map();
@@ -295,7 +308,8 @@ function updateAccessibleExits()
 	for (let entr of ENTRANCES)
 	{
 		let select = document.querySelector('#' + entr.name);
-		if (select && select.value) _processField(_emap.get(entr.name).field);
+		if (select && select.value && !select.getAttribute('disabled'))
+			_processField(_emap.get(entr.name).field);
 	}
 
 	for (let select of document.querySelectorAll('#soul-list select.doormatch'))
@@ -463,6 +477,24 @@ function buildTracker()
 		div.appendChild(label);
 		document.querySelector('#soul-list').appendChild(div);
 	}
+
+	// if we aren't in full rando, the DROP entrances are not randomized
+	// so we need to set them to default values and lock them
+	if (!allowAny)
+	{
+		for (let entrance of ENTRANCES)
+		{
+			// only applies to DROP type entrances
+			if (entrance.type != Direction.DROP) continue;
+
+			let select = document.querySelector('select#' + entrance.name);
+			if (select)
+			{
+				select.setAttribute('disabled', true);
+				select.value = entrance.default;
+			}
+		}
+	}
 }
 
 buildTracker();
@@ -495,9 +527,20 @@ function calculateEscapeRoute(startfield)
 		['Icefire', [{to: 'Icefire-Vidofnir', via: null}]],
 		['Malice-Top', [{to: 'Malice', via: null}]],
 		['Mausoleum', [{to: 'Guidance', via: "Samaranta's Elevator (A-5)"}]],
+
+		// corridor of blood
+		['Valhalla', [
+			{to: 'Chaos-Abzu', via: 'Corridor of Blood (C-2)'},
+		]],
+		['DSLM', [
+			{to: 'Frost-Giants-Back', via: 'Corridor of Blood (C-2)'},
+		]],
+		['Chaos-Abzu', [
+			{to: 'Malice', via: 'Corridor of Blood (C-3)'},
+		]],
 	]);
 
-	for (let orig of ['Guidance', 'Mausoleum', 'Surface', 'Illusion'])
+	for (let orig of ['Guidance', 'Mausoleum', 'Surface', 'Illusion', 'Nibiru'])
 	{
 		let name = RENAME_FIELD.get(orig);
 		for (let field of GRAIL_FIELDS)
