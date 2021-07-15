@@ -29,6 +29,7 @@ const ENTRANCES =
 [
 	{"name": "surface-main", "display": "Surface Main (F-5)", "oneway": false, "field": "Surface", "type": Direction.RIGHT, "logname": "Village of Departure Main (F-5)", "default": null},
 	{"name": "surface-ladder", "display": "Surface Ladder Down (F-3)", "oneway": false, "field": "Surface", "type": Direction.DOWN, "logname": "Village of Departure Ladder (F-3)", "default": null},
+	{"name": "surface-xelpud", "display": "Surface Next to Xelpud (D-4)", "oneway": false, "field": "Surface", "type": Direction.GATE, "logname": "Village of Departure Next to Xelpud (D-4)", "default": null},
 
 	{"name": "guidance-main", "display": "Guidance Main Entrance (C-1)", "oneway": false, "field": "Guidance", "type": Direction.LEFT, "logname": "Gate of Guidance Main (C-1)", "default": null},
 	{"name": "guidance-down", "display": "Guidance Ladder Down (A-6)", "oneway": false, "field": "Guidance", "type": Direction.DOWN, "logname": "Gate of Guidance Ladder (A-6)", "default": null},
@@ -64,6 +65,8 @@ const ENTRANCES =
 	{"name": "ib-bottom-wheel", "display": "Imm Battlefield Wheel Ladder Down (D-7)", "oneway": false, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Down Ladder near Spinning Wheel (D-7)", "default": null},
 	{"name": "ib-buried-fortress", "display": "Imm Battlefield Alviss Ladder Down (G-7)", "oneway": false, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Down Ladder below Battery Chest (G-7)", "default": null},
 	{"name": "ib-bottom-moon", "display": "Imm Battlefield Moon Altar Hallway (G-7)", "oneway": true, "field": "Battlefield", "type": Direction.DOWN, "logname": "Immortal Battlefield Moon Altar Hallway (G-7)", "default": null},
+	{"name": "ib-altar-left", "display": "Imm Battlefield Dinosaur Left Gate (D-3)", "oneway": false, "field": "Battlefield", "type": Direction.GATE, "logname": "Immortal Battlefield Dinosaur Left Gate (D-3)", "default": null},
+	{"name": "ib-altar-right", "display": "Imm Battlefield Dinosaur Right Gate (F-3)", "oneway": false, "field": "Battlefield", "type": Direction.GATE, "logname": "Immortal Battlefield Dinosaur Right Gate (F-3)", "default": null},
 
 	{"name": "icefire-mid-gate", "display": "Icefire Middle Gate (D-3)", "oneway": false, "field": "Icefire", "type": Direction.GATE, "logname": "Icefire Treetop Gate (D-3)", "default": null},
 	{"name": "icefire-fire-up", "display": "Icefire Fire Side Ladder Up (C-1)", "oneway": false, "field": "Icefire", "type": Direction.UP, "logname": "Icefire Treetop Ladder Fire Side (C-1)", "default": null},
@@ -89,6 +92,9 @@ const ENTRANCES =
 
 	{"name": "nibiru", "display": "Nibiru (B-3)", "oneway": false, "field": "Nibiru", "type": Direction.DROP, "logname": "", "default": "dslm-pyramid-nibiru"},
 	{"name": "inferno-echidna", "display": "Inferno Cavern, Echidna's Chamber (B-1)", "oneway": true, "field": "Echidna", "type": Direction.UP, "logname": "Inferno Cavern (B-1)", "default": null},
+	
+	{"name": "altar-left", "display": "Indra Altar Left Gate (A-1)", "oneway": false, "field": "Altar-Top-Left", "type": Direction.GATE, "logname": "Indra Altar Left Gate (A-1)", "default": null},
+	{"name": "altar-right", "display": "Indra Altar Right Gate (C-1)", "oneway": false, "field": "Altar", "type": Direction.GATE, "logname": "Indra Altar Right Gate (C-1)", "default": null},
 ];
 
 let _emap = new Map();
@@ -123,6 +129,8 @@ for (let door of DOORS)
 
 const RENAME_FIELD = new Map(
 [
+	["Altar", "Altar"],
+	["Altar-Top-Left", "Altar"],
 	["Annwfn", "Annwfn"],
 	["Annwfn-Lower", "Annwfn"],
 	["Battlefield", "Immortal Battlefield"],
@@ -245,6 +253,7 @@ function updateAccessibleExits()
 		['Icefire', [{to: 'Icefire-Vidofnir', via: null}]],
 		['Malice-Top', [{to: 'Malice', via: null}]],
 		['Mausoleum', [{to: 'Guidance', via: "Samaranta's Elevator (A-5)"}]],
+		['Altar-Top-Left', [{to: 'Altar', via: null}]],
 
 		// corridor of blood
 		['Valhalla', [
@@ -525,6 +534,7 @@ function calculateEscapeRoute(startfield)
 		['Icefire', [{to: 'Icefire-Vidofnir', via: null}]],
 		['Malice-Top', [{to: 'Malice', via: null}]],
 		['Mausoleum', [{to: 'Guidance', via: "Samaranta's Elevator (A-5)"}]],
+		['Altar-Top-Left', [{to: 'Altar', via: null}]],
 
 		// corridor of blood
 		['Valhalla', [
