@@ -95,6 +95,8 @@ const ENTRANCES =
 	
 	{"name": "altar-left", "display": "Indra Altar Left Gate (A-1)", "oneway": false, "field": "Altar-Top-Left", "type": Direction.GATE, "logname": "Indra Altar Left Gate (A-1)", "default": null},
 	{"name": "altar-right", "display": "Indra Altar Right Gate (C-1)", "oneway": false, "field": "Altar", "type": Direction.GATE, "logname": "Indra Altar Right Gate (C-1)", "default": null},
+	
+	{"name": "forest", "display": "Forest (Initial Start Area)", "oneway": false, "field": "Forest", "type": Direction.RIGHT, "logname": "Forest (Initial Start Area)", "default": null},
 ];
 
 let _emap = new Map();
@@ -145,6 +147,7 @@ const RENAME_FIELD = new Map(
 	["Echidna", "Inferno Cavern, Echidna's Chamber"],
 	["Eternal-Prison", "Eternal Prison"],
 	["Endless", "Endless Corridor"],
+	["Forest", "Forest"],
 	["Frost-Giants", "Shrine of the Frost Giants"],
 	["Frost-Giants-Back", "Shrine of the Frost Giants"],
 	["Frost-Giants-Balor", "Shrine of the Frost Giants"],
