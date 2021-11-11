@@ -77,7 +77,7 @@ const ENTRANCES =
 
 	{"name": "moonlight-top", "display": "Moonlight Top (B-1)", "oneway": false, "field": "Moonlight", "type": Direction.UP, "logname": "Temple of Moonlight (Stairway of Eden)"},
 	{"name": "moonlight-top-R", "display": "Moonlight Top Right (D-2)", "oneway": false, "field": "Moonlight", "type": Direction.UP, "logname": "Temple of Moonlight (Neptune's Feet)"},
-	{"name": "moonlight-bottom", "display": "Moonlight Bottom Left Blue (B-5)", "oneway": false, "field": "Moonlight", "type": Direction.LEFT, "logname": "Temple of Moonlight (Sealed Approach)"},
+	{"name": "moonlight-bottom", "display": "Moonlight Bottom Left Blue (B-5)", "oneway": false, "field": "Moonlight-Bottom", "type": Direction.LEFT, "logname": "Temple of Moonlight (Sealed Approach)"},
 
 	{"name": "goddess-top-L", "display": "Goddess Tower Top Left (C-1)", "oneway": false, "field": "Goddess", "type": Direction.LEFT, "logname": "Tower of the Goddess (Path to Life)"},
 	{"name": "goddess-top-R", "display": "Goddess Tower Top Right (E-1)", "oneway": false, "field": "Goddess", "type": Direction.DOWN, "logname": "Tower of the Goddess (Path to Power)"},
@@ -133,41 +133,43 @@ let _dmap = new Map();
 for (let door of DOORS)
 	_dmap.set(door.name, door);
 
-const RENAME_FIELD = new Map(
-[
-	["Surface", "Surface"],
-	["Surface-Hidden", "Surface (Hidden Ladders)"],
-	["Guidance", "Gate of Guidance"],
-	["Mausoleum", "Mausoleum of the Giants"],
-	["Sun", "Temple of the Sun"],
-	["Spring", "Spring in the Sky"],
-	["Inferno", "Inferno Caverns"],
-	["Inferno-Lamia", "Inferno Caverns (Echidna's Chamber)"],
-	["Extinction", "Chamber of Extinction"],
-	["Extinction-Magatama", "Chamber of Extinction (Magatama Chamber)"],
-	["Extinction-Palenque", "Chamber of Extinction (Palenque's Field)"],
-	["Twin", "Twin Labyrinths"],
-	["Endless", "Endless Corridor"],
-	["Mother-Side-A", "Shrine of the Mother (Left Side Room)"],
-	["Mother-Side-F", "Shrine of the Mother (Right Side Room)"],
-	["Mother-Top", "Shrine of the Mother"],
-	["Mother-Bottom", "Shrine of the Mother"],
-	["Illusion", "Gate of Illusion"],
-	["Graveyard", "Graveyard of the Giants"],
-	["Moonlight", "Temple of Moonlight"],
-	["Goddess", "Tower of the Goddess"],
-	["Ruin", "Tower of Ruin"],
-	["Ruin-Middle", "Tower of Ruin"],
-	["Ruin-Top", "Tower of Ruin"],
-	["Birth", "Chamber of Birth (Grail Side)"],
-	["Birth-Side", "Chamber of Birth (Wedge Side)"],
-	["Dimensional", "Dimensional Corridor"],
-	["8-Bit Surface", "8-Bit Surface"],
-	["8-Bit Guidance", "8-Bit Guidance"],
-	["8-Bit Mausoleum", "8-Bit Mausoleum"],
-]);
+const FIELD_TABLE = [
+	["Surface", {name: "Surface", hasNPCs: true}],
+	["Surface-Hidden", {name: "Surface (Hidden Ladders)", hasNPCs: false}],
+	["Guidance", {name: "Gate of Guidance", hasNPCs: true}],
+	["Guidance-Top", {name: "Gate of Guidance", hasNPCs: false}],
+	["Mausoleum", {name: "Mausoleum of the Giants", hasNPCs: true}],
+	["Sun", {name: "Temple of the Sun", hasNPCs: true}],
+	["Spring", {name: "Spring in the Sky", hasNPCs: true}],
+	["Inferno", {name: "Inferno Caverns", hasNPCs: true}],
+	["Inferno-Lamia", {name: "Inferno Caverns (Echidna's Chamber)", hasNPCs: false}],
+	["Extinction", {name: "Chamber of Extinction", hasNPCs: true}],
+	["Extinction-Magatama", {name: "Chamber of Extinction (Magatama Chamber)", hasNPCs: false}],
+	["Extinction-Palenque", {name: "Chamber of Extinction (Palenque's Field)", hasNPCs: true}],
+	["Twin", {name: "Twin Labyrinths", hasNPCs: true}],
+	["Endless", {name: "Endless Corridor", hasNPCs: true}],
+	["Mother-Side-A", {name: "Shrine of the Mother (Left Side Room)", hasNPCs: false}],
+	["Mother-Side-F", {name: "Shrine of the Mother (Right Side Room)", hasNPCs: false}],
+	["Mother-Top", {name: "Shrine of the Mother", hasNPCs: false}],
+	["Mother-Bottom", {name: "Shrine of the Mother", hasNPCs: false}],
+	["Illusion", {name: "Gate of Illusion", hasNPCs: true}],
+	["Graveyard", {name: "Graveyard of the Giants", hasNPCs: true}],
+	["Moonlight", {name: "Temple of Moonlight", hasNPCs: true}],
+	["Moonlight-Bottom", {name: "Temple of Moonlight", hasNPCs: false}],
+	["Goddess", {name: "Tower of the Goddess", hasNPCs: true}],
+	["Ruin", {name: "Tower of Ruin (Main/Bottom Floors)", hasNPCs: true}],
+	["Ruin-Middle", {name: "Tower of Ruin (Wedge Floor)", hasNPCs: false}],
+	["Ruin-Top", {name: "Tower of Ruin (Nuwa's Pyramid)", hasNPCs: false}],
+	["Birth", {name: "Chamber of Birth (Grail Side)", hasNPCs: true}],
+	["Birth-Side", {name: "Chamber of Birth (Wedge Side)", hasNPCs: false}],
+	["Dimensional", {name: "Dimensional Corridor", hasNPCs: true}],
+	["8-Bit Surface", {name: "8-Bit Surface", hasNPCs: true}],
+	["8-Bit Guidance", {name: "8-Bit Guidance", hasNPCs: true}],
+	["8-Bit Mausoleum", {name: "8-Bit Mausoleum", hasNPCs: false}],
+];
 
-const STARTING_SCREENS = ['Mother-Top', 'Surface', 'Guidance', 'Mausoleum', 'Sun', 'Spring', 'Inferno', 'Extinction', 'Twin', 'Endless', 'Illusion', 'Graveyard', 'Moonlight', 'Goddess', 'Ruin', 'Birth', 'Dimensional', '8-Bit Surface'];
+const FIELD_INFO = new Map(FIELD_TABLE);
+const STARTING_SCREENS = ['Surface', 'Guidance', 'Mausoleum', 'Sun', 'Spring', 'Inferno', 'Extinction', 'Twin', 'Endless', 'Illusion', 'Graveyard', 'Moonlight', 'Goddess', 'Ruin', 'Birth', 'Dimensional', '8-Bit Surface'];
 
 let door_selects = [];
 
@@ -324,7 +326,8 @@ function updateEscapeRoute()
 	for (let item of document.querySelectorAll('#escape-route-list li'))
 		item.parentNode.removeChild(item);
 
-	let escape = calculateEscapeRoute(document.querySelector('#escape-from').value);
+	let escape = calculateEscapeRoute(document.querySelector('#escape-from').value,
+		document.querySelector('#escape-to').value);
 	let list = document.querySelector('#escape-route-list');
 	for (let path of escape)
 	{
@@ -410,14 +413,30 @@ for (let door of DOORS)
 	document.querySelector('ul#unfound-doors-list').appendChild(item);
 }
 
-let escape_from_select = document.querySelector('#escape-from');
-escape_from_select.onchange = updateEscapeRoute;
+let start_select = document.querySelector('#escape-from');
+option = document.createElement('option');
+option.setAttribute('value', 'no-surface-warp');
+option.appendChild(document.createTextNode('NO GLITCHED ESCAPE'));
+start_select.appendChild(option);
+
+start_select.onchange = updateEscapeRoute;
 for (let start of STARTING_SCREENS)
 {
 	option = document.createElement('option');
 	option.setAttribute('value', start);
-	option.appendChild(document.createTextNode(RENAME_FIELD.get(start)));
-	escape_from_select.appendChild(option);
+	option.appendChild(document.createTextNode(FIELD_INFO.get(start).name));
+	start_select.appendChild(option);
+}
+
+let escape_to = document.querySelector('#escape-to');
+escape_to.onchange = updateEscapeRoute;
+for (let location of FIELD_TABLE)
+{
+	if (!location[1].hasNPCs) continue;
+	option = document.createElement('option');
+	option.setAttribute('value', location[0]);
+	option.appendChild(document.createTextNode(location[1].name));
+	escape_to.appendChild(option);
 }
 
 const DOOR_IMAGES =
@@ -469,7 +488,7 @@ function __addConnection(map, a1, a2)
 	map.get(a1.field).push({to: a2.field, via: a1.display});
 }
 
-function calculateEscapeRoute(startfield)
+function calculateEscapeRoute(startfield, targetfield)
 {
 	let edges = new Map(
 	[
@@ -480,8 +499,9 @@ function calculateEscapeRoute(startfield)
 		['Mausoleum', [{to: 'Spring', via: "Ribu's Pipe (D-5)"}]],
 		['Ruin-Top', [{to: 'Ruin-Middle', via: null}]],
 		['Ruin-Middle', [{to: 'Ruin', via: null}]],
+		['Moonlight-Bottom', [{to: 'Moonlight', via: null}]],
 		['Inferno', [{to: 'Extinction-Palenque', via: "Viy's Chamber (D-6)"}]],
-		['Mother-Top', [{to: 'Mother-Bottom', via: "Original Shrine of the Mother (Unmarked Door)"}]],
+		['Mother-Top', [{to: 'Mother-Bottom', via: "Original Shrine of the Mother (Unmarked Door)"}, {to: startfield, via: 'Surface Warp (Glitch)'}]],
 	]);
 
 	for (let entr of ENTRANCES)
@@ -512,7 +532,7 @@ function calculateEscapeRoute(startfield)
 
 	function tryFrom(ff)
 	{
-		if (ff == 'Sun') return [["You're already there!"]];
+		if (ff == targetfield) return [["You're already there!"]];
 
 		let seen = new Set([ff]);
 		let backtrack = new Map();
@@ -524,7 +544,7 @@ function calculateEscapeRoute(startfield)
 			backtrack.set(edge.to, Object.assign({from: ff}, edge));
 		}
 
-		while (work.length && !seen.has('Sun'))
+		while (work.length && !seen.has(targetfield))
 		{
 			let field = work.shift().to;
 			for (let exit of edges.get(field) || [])
@@ -535,23 +555,23 @@ function calculateEscapeRoute(startfield)
 			}
 		}
 
-		if (!seen.has('Sun')) return [];
+		if (!seen.has(targetfield)) return [];
 
-		let path = [[RENAME_FIELD.get('Sun')]], field = 'Sun';
+		let path = [[FIELD_INFO.get(targetfield).name]], field = targetfield;
 		while (field != ff)
 		{
 			let trans = backtrack.get(field);
 			if (!trans) return [];
 
 			if (trans.via)
-				path.unshift([RENAME_FIELD.get(trans.from), 'take ' + trans.via]);
+				path.unshift([FIELD_INFO.get(trans.from).name, 'take ' + trans.via]);
 			field = trans.from;
 		}
 
 		return path;
 	}
 
-	let path = tryFrom(startfield);
+	let path = tryFrom('Mother-Top');
 	if (path.length) return path;
 
 	return [["Uhhh... You're on your own. Good luck, kiddo! :^)"]];

@@ -118,6 +118,11 @@ li {
 	margin-bottom: 5px;
 }
 
+.field-list {
+	width: 350px;
+	margin-bottom: 5px;
+}
+
 .via-path {
 	margin-top: 5px;
 	opacity: 0.45;
