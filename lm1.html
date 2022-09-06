@@ -9,33 +9,55 @@
 	<div>
 		<img src="images/LM1.png">
 	</div>
-	<h1>Entrances</h1>
-	<div id="entrance-list"></div>
 
-	<h1>Doors</h1>
-	<div id="door-list"></div>
-	<h3>Not yet found</h3>
-	<div id="unfound-doors">
-		<ul id="unfound-doors-list"></ul>
+	<div class="tab-content">
+		<h1>Entrances</h1>
+		<div id="entrance-list"></div>
 	</div>
 
-	<h1>Escape Route</h1>
-	<div>
-		<select id="escape-from" class="field-list"></select>
-		<label>Starting Location</label>
-	</div>
-	<div>
-		<select id="escape-to" class="field-list"></select>
-		<label>Where's Mulbruk?</label>
-	</div>
-	<div id="escape-route">
-		<p><em class="note">Not guaranteed to be the fastest route, but attempts to minimize area transitions!</em></p>
-		<ul id="escape-route-list"></ul>
+	<div class="tab-content">
+		<h1>Doors</h1>
+		<div id="door-list"></div>
+		<h3>Not yet found</h3>
+		<div id="unfound-doors">
+			<ul id="unfound-doors-list"></ul>
+		</div>
 	</div>
 
-	<h1>Notes</h1>
-	<div>
-		<textarea rows="5" id="notes"></textarea>
+	<div class="tab-content">
+		<h1>Wall Seals & Sigils</h1>
+		<div id="seals-list"></div>
+		<h2>Tracking</h2>
+		<button id="set-seal-defaults">Set Default Seals</button>
+		<button id="toggle-seal-size">Toggle Seal Icon Size</button>
+		<button id="clear-seal-settings">Clear</button>
+	</div>
+
+	<div class="tab-content">
+		<h1>NPC Locations</h1>
+		<div id="npc-list"></div>
+	</div>
+
+	<div class="tab-content">
+		<h1>Escape Route</h1>
+		<div>
+			<select id="escape-from" class="field-list"></select>
+			<label>Starting Location</label>
+		</div>
+		<div>
+			<select id="escape-to" class="field-list"></select>
+			<label>Where's Mulbruk?</label>
+		</div>
+		<div id="escape-route">
+			<p><em class="note">Not guaranteed to be the fastest route, but attempts to minimize area transitions!</em></p>
+			<ul id="escape-route-list"></ul>
+		</div>
+	</div>
+	<div class="tab-content">
+		<h1>General Notes</h1>
+		<div>
+			<textarea rows="20" id="notes"></textarea>
+		</div>
 	</div>
 
 	<script src="./lm1.js">

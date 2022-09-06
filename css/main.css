@@ -87,6 +87,48 @@ h1,h2,h3,h4,h5,h6,strong {
 	margin-left: 5px;
 }
 
+.seal {
+	background-image: url("../images/seals-small.png");
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	margin-right: 7px;
+}
+
+.seal.large {
+	background-image: url("../images/seals-large.png");
+	width: 40px;
+	height: 40px;
+	margin-right: 10px;
+}
+
+.seal-info {
+	position: relative;
+	margin-left: 20px;
+}
+.seal-info * { vertical-align: middle; }
+
+.seal-info p {
+	display: inline-block;
+	margin: 8px 0;
+}
+
+.seal-info input[type="checkbox"]:checked + p {
+	opacity: 0.15;
+	text-decoration: line-through;
+}
+
+.seal.seal0 { background-position: 0 0; }
+.seal.seal1 { background-position: -20px 0; }
+.seal.seal2 { background-position: -40px 0; }
+.seal.seal3 { background-position: -60px 0; }
+.seal.seal4 { background-position: -80px 0; }
+
+.seal.large.seal1 { background-position: -40px 0; }
+.seal.large.seal2 { background-position: -80px 0; }
+.seal.large.seal3 { background-position: -120px 0; }
+.seal.large.seal4 { background-position: -160px 0; }
+
 select option.used {
 	color: #CCCCCC;
 }

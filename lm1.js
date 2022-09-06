@@ -133,6 +133,29 @@ let _dmap = new Map();
 for (let door of DOORS)
 	_dmap.set(door.name, door);
 
+const WALL_SEALS = [
+	{"name": "Surface (L-2) Birth Seal Chest", "default": [1]},
+	{"name": "Surface (D-3) Chest above Hot Spring", "default": [3]},
+	{"name": "Gate of Guidance (E-2) \"Offer 3 Lights\" Puzzle", "default": [3]},
+	{"name": "Temple of the Sun (C-3) Unlock Mulbruk's Room", "default": [1]},
+	{"name": "Temple of the Sun (G-4) Unlock Bottom Right Exits", "default": [1]},
+	{"name": "Temple of the Sun (B-5) Open Discount Shop", "default": [4]},
+	{"name": "Spring in the Sky (A-4) Elevator Chest", "default": [2]},
+	{"name": "Spring in the Sky (C-2) Water Release", "default": [1]},
+	{"name": "Inferno Caverns (D-3) Access to Pazuzu", "default": [2]},
+	{"name": "Chamber of Extinction (F-5) Chest above Grail Tablet", "default": [2]},
+	{"name": "Chamber of Extinction (F-5) Activate Lights", "default": [3]},
+	{"name": "Endless Corridor (C-1) Shop", "default": [1]},
+	{"name": "Gate of Illusion (D-3) Drop Door above Chi You", "default": [2]},
+	{"name": "Graveyard of Giants (D-4) Gauntlet Chest", "default": [3]},
+	{"name": "Temple of Moonlight (E-5) Open Lower Right Side", "default": [2]},
+	{"name": "Tower of Ruin (G-1) Activate Nuwa Fight", "default": [4]},
+	{"name": "Dimensional Corridor (C-1) Chest above Ushumagallu", "default": [4]},
+	{"name": "Shrine of the Mother (B-2) Crystal Skull Chest", "default": [3]},
+	{"name": "Shrine of the Mother (C-2) Four Seals Chest", "default": [1, 2, 3, 4]},
+	{"name": "Shrine of the Mother (C-3) Activate Mother FIght", "default": [1, 2, 3, 4]},
+]
+
 const FIELD_TABLE = [
 	["Surface", {name: "Surface", hasNPCs: true}],
 	["Surface-Hidden", {name: "Surface (Hidden Ladders)", hasNPCs: false}],
@@ -198,9 +221,7 @@ function changeEntrance(target)
 		changeEntrance(other);
 	}
 
-	updateEntranceOptions();
-	updateAccessibleExits();
-	updateEscapeRoute();
+	update();
 }
 
 function changeEntranceEvent(e)
@@ -230,9 +251,7 @@ function changeDoorEvent(e)
 			select.value = '';
 	}
 
-	updateDoorOptions();
-	updateAccessibleExits();
-	updateEscapeRoute();
+	update();
 	recordHistory();
 }
 
@@ -321,6 +340,11 @@ function updateAccessibleExits()
 	}
 }
 
+function updateAccessibleSeals()
+{
+
+}
+
 function updateEscapeRoute()
 {
 	for (let item of document.querySelectorAll('#escape-route-list li'))
@@ -351,6 +375,7 @@ function update()
 	updateEntranceOptions();
 	updateDoorOptions();
 	updateAccessibleExits();
+	updateAccessibleSeals();
 	updateEscapeRoute();
 }
 
@@ -437,6 +462,75 @@ for (let location of FIELD_TABLE)
 	option.setAttribute('value', location[0]);
 	option.appendChild(document.createTextNode(location[1].name));
 	escape_to.appendChild(option);
+}
+
+function cycleSeals(e)
+{
+	for (let i = 0; i < 5; i++)
+		if (e.target.classList.contains('seal' + i))
+		{
+			let next = (i + 1) % 5;
+			e.target.classList.replace('seal' + i, 'seal' + next);
+			return;
+		}
+
+	// in case there was no seal counter, assume it was seal0
+	e.target.classList.add('seal1');
+}
+
+for (let seal of WALL_SEALS)
+{
+	let div = document.createElement('div');
+	div.classList.add('seal-info');
+
+	for (let x of seal.default)
+	{
+		let span = document.createElement('span');
+		span.classList.add('seal', 'seal0');
+		span.setAttribute('data-default', 'seal' + x)
+		span.onclick = cycleSeals;
+		div.appendChild(span);
+	}
+
+	let checkbox = document.createElement('input');
+	checkbox.setAttribute('type', 'checkbox');
+	div.appendChild(checkbox);
+
+	let p = document.createElement('p');
+	p.appendChild(document.createTextNode(seal.name));
+
+	let icon = document.createElement('span');
+	icon.classList.add('icon');
+	icon.appendChild(document.createTextNode("(?)"));
+	p.appendChild(icon);
+
+	div.appendChild(p);
+
+	document.querySelector('#seals-list').appendChild(div);
+}
+
+document.querySelector('#toggle-seal-size').onclick = function()
+{
+	for (let seal of document.querySelectorAll('.seal'))
+		seal.classList.toggle('large');
+}
+
+function clearSeals()
+{
+	for (let seal of document.querySelectorAll('.seal'))
+	{
+		for (let i = 1; i < 5; i++)
+			seal.classList.remove('seal' + i);
+		seal.classList.add('seal0');
+	}
+}
+
+document.querySelector('#clear-seal-settings').onclick = clearSeals;
+document.querySelector('#set-seal-defaults').onclick = function()
+{
+	clearSeals();
+	for (let seal of document.querySelectorAll('.seal'))
+		seal.classList.add(seal.getAttribute('data-default'));
 }
 
 const DOOR_IMAGES =
