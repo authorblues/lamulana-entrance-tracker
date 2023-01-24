@@ -463,6 +463,7 @@ for (let location of FIELD_TABLE)
 	option.appendChild(document.createTextNode(location[1].name));
 	escape_to.appendChild(option);
 }
+escape_to.value = 'Sun';
 
 function cycleSeals(e)
 {

@@ -27,6 +27,8 @@ const DIRECTION_MATCH = new Map(
 
 const ENTRANCES =
 [
+	{"name": "surface-start", "display": "Surface Starting Area", "oneway": false, "field": "Surface", "type": Direction.GATE, "logname": "Starting Area", "default": "surface-xelpud"},
+	{"name": "surface-xelpud", "display": "Surface By Xelpud", "oneway": false, "field": "Surface", "type": Direction.GATE, "logname": "Village of Departure Next to Xelpud", "default": "surface-start"},
 	{"name": "surface-main", "display": "Surface Main (F-5)", "oneway": false, "field": "Surface", "type": Direction.RIGHT, "logname": "Village of Departure Main (F-5)", "default": null},
 	{"name": "surface-ladder", "display": "Surface Ladder Down (F-3)", "oneway": false, "field": "Surface", "type": Direction.DOWN, "logname": "Village of Departure Ladder (F-3)", "default": null},
 	{"name": "surface-xelpud", "display": "Surface Next to Xelpud (D-4)", "oneway": false, "field": "Surface", "type": Direction.GATE, "logname": "Village of Departure Next to Xelpud (D-4)", "default": null},
@@ -495,8 +497,7 @@ function buildTracker()
 	{
 		for (let entrance of ENTRANCES)
 		{
-			// only applies to DROP type entrances
-			if (entrance.type != Direction.DROP) continue;
+			if (!entrance.default) continue;
 
 			let select = document.querySelector('select#' + entrance.name);
 			if (select)
